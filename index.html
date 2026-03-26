@@ -816,7 +816,7 @@
 // ⚠️  SETUP: Paste your Google Apps Script Web App URL below
 //    after deploying Code.gs (see deployment instructions)
 // ═══════════════════════════════════════════════════════════════
-const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxJgCbYssTIX0DkOJwtGszYHqiddLAOs-qEEkh_wfXfQm5tyfB_ZKgKmBTDdaG2M8Qv/exec';
+const SHEET_WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 // ═══════════════ STATE ═══════════════
 let submissions = JSON.parse(localStorage.getItem('aviel_submissions') || '[]');
@@ -1028,7 +1028,9 @@ async function saveToSheet(data) {
     query:         data.query      || '',
     // Scores
     riskScore:     data.score,
-    riskLevel:     data.risk
+    riskLevel:     data.risk,
+    // AI Report
+    reportText:    data.reportText || ''
   };
   await fetch(SHEET_WEBHOOK_URL, {
     method: 'POST',
@@ -1041,7 +1043,7 @@ async function saveToSheet(data) {
 // ═══════════════ AI REPORT GENERATION ═══════════════
 async function generateAIReport(data) {
   const prompt = buildPrompt(data);
- const response = await fetch("/api/report", {
+  const response = await fetch("/api/report", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
