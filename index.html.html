@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviel Alpha — Integrated Tax System</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --cream: #111111;
+    --gold: #ff6b00;
+    --gold-light: #ff8c33;
+    --sage: #ff6b00;
+    --sage-light: #ff8c33;
+    --danger: #e74c3c;
+    --warn: #f39c12;
+    --ok: #27ae60;
+    --border: #2e2e2e;
+    --muted: #888888;
+    --surface: #1e1e1e;
+    --surface2: #252525;
+    --text: #f0f0f0;
+    --text-muted: #999;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #111111;
+    color: #f0f0f0;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #1a1a1a;
+    color: #f0f0f0;
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #ff6b00;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 14px; }
+  .logo-img { width: 48px; height: 48px; object-fit: contain; border-radius: 4px; }
+  .logo { font-family: 'IBM Plex Sans', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; color: #f0f0f0; }
+  .logo span { color: #ff6b00; }
+  .tagline { font-family: 'IBM Plex Mono', monospace; font-size: .6rem; color: #888; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+
+  /* ── NAV TABS ── */
+  .nav {
+    background: #161616;
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #ff6b00;
+  }
+  .nav-btn {
+    padding: 13px 28px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    border-right: 1px solid #2a2a2a;
+    transition: all .2s;
+  }
+  .nav-btn:hover { color: #ff6b00; background: #1e1e1e; }
+  .nav-btn.active { color: #fff; background: #ff6b00; border-bottom: 2px solid #ff6b00; }
+
+  /* ── VIEWS ── */
+  .view { display: none; padding: 40px; max-width: 1100px; margin: 0 auto; color: #f0f0f0; }
+  .view.active { display: block; }
+
+  /* ── SECTION HEADINGS ── */
+  .view-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    border-bottom: 2px solid #ff6b00;
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+  }
+  .view-sub { font-size: .85rem; color: #888; margin-bottom: 30px; }
+
+  /* ── INTAKE FORM ── */
+  .form-card {
+    background: #1e1e1e;
+    border: 1px solid #2e2e2e;
+    border-top: 4px solid #ff6b00;
+    padding: 36px;
+    border-radius: 2px;
+  }
+  .section-badge {
+    display: inline-block;
+    background: #ff6b00;
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .12em;
+    padding: 3px 10px;
+    margin-bottom: 18px;
+  }
+  .section-title { font-family: 'IBM Plex Sans', sans-serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: #ff6b00; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: .78rem; font-weight: 600; letter-spacing: .04em; color: #999; text-transform: uppercase; }
+  label .req { color: var(--gold); margin-left: 3px; }
+
+  input[type=text], input[type=email], select, textarea {
+    border: 1px solid #333;
+    background: #141414;
+    padding: 10px 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: .9rem;
+    color: #f0f0f0;
+    outline: none;
+    transition: border-color .2s;
+    border-radius: 1px;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #ff6b00; background: #1a1a1a; }
+  select option { background: #1e1e1e; color: #f0f0f0; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .radio-group, .checkbox-group {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;
+  }
+  .radio-option, .check-option {
+    display: flex; align-items: center; gap: 7px;
+    background: #141414; border: 1px solid #333;
+    padding: 7px 14px; cursor: pointer;
+    font-size: .85rem; border-radius: 1px; transition: all .15s; color: #ccc;
+  }
+  .radio-option:hover, .check-option:hover { border-color: #ff6b00; background: #1e1e1e; color: #fff; }
+  .radio-option.selected, .check-option.selected { background: #ff6b00; color: white; border-color: #ff6b00; }
+  .radio-option input, .check-option input { display: none; }
+
+  .type-selector {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px;
+  }
+  .type-card {
+    border: 2px solid #2e2e2e; padding: 24px; cursor: pointer; text-align: center;
+    transition: all .2s; background: #141414; border-radius: 2px;
+  }
+  .type-card:hover { border-color: #ff6b00; background: #1e1e1e; }
+  .type-card.selected { border-color: #ff6b00; background: #1e1e1e; box-shadow: 0 0 0 1px #ff6b00; }
+  .type-card .icon { font-size: 2rem; margin-bottom: 8px; }
+  .type-card .label { font-family: 'IBM Plex Sans', sans-serif; font-size: 1.1rem; font-weight: 700; color: #f0f0f0; }
+  .type-card .desc { font-size: .78rem; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #2e2e2e; margin: 28px 0; }
+
+  .hidden-section { display: none; }
+  .visible-section { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── SUBMIT BUTTON ── */
+  .btn-primary {
+    background: #ff6b00;
+    color: white;
+    border: none;
+    padding: 14px 36px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .8rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background .2s;
+    margin-top: 24px;
+  }
+  .btn-primary:hover { background: #ff8c33; }
+  .btn-secondary {
+    background: transparent;
+    color: #ff6b00;
+    border: 1.5px solid #ff6b00;
+    padding: 10px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: all .2s;
+    border-radius: 2px;
+  }
+  .btn-secondary:hover { background: #ff6b00; color: white; }
+
+  /* ── DASHBOARD ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card {
+    background: #1e1e1e; border: 1px solid #2e2e2e;
+    border-top: 3px solid #ff6b00;
+    padding: 20px; border-radius: 2px;
+  }
+  .stat-value { font-family: 'IBM Plex Sans', sans-serif; font-size: 2.2rem; font-weight: 700; color: #f0f0f0; }
+  .stat-label { font-size: .72rem; color: #888; text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+  .stat-card.green { border-top-color: #27ae60; }
+  .stat-card.red { border-top-color: #e74c3c; }
+  .stat-card.amber { border-top-color: #f39c12; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  thead tr { background: #ff6b00; color: #fff; }
+  th { padding: 11px 14px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: .65rem; letter-spacing: .1em; font-weight: 500; }
+  td { padding: 10px 14px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; color: #ddd; }
+  tr:hover td { background: #222; }
+
+  .badge {
+    display: inline-block; padding: 2px 9px; font-size: .68rem; border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500; letter-spacing: .05em;
+  }
+  .badge-business { background: #1a3a5c; color: #7ec8ff; }
+  .badge-individual { background: #3a1a5c; color: #c87eff; }
+  .badge-critical { background: #3a1a1a; color: #ff7c7c; }
+  .badge-high { background: #3a2a0a; color: #ffc96b; }
+  .badge-moderate { background: #1a3a1a; color: #7eff9c; }
+  .badge-low { background: #1a3a1a; color: #7eff9c; }
+
+  .score-bar { display: flex; align-items: center; gap: 8px; }
+  .score-track { flex: 1; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; transition: width .5s; }
+  .fill-critical { background: var(--danger); }
+  .fill-high { background: var(--warn); }
+  .fill-moderate { background: #2ecc71; }
+
+  /* ── REPORT GENERATOR ── */
+  .report-select-card {
+    border: 1px solid #2e2e2e; background: #1e1e1e; padding: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; border-radius: 2px; cursor: pointer; transition: border-color .2s;
+  }
+  .report-select-card:hover { border-color: #ff6b00; }
+  .report-select-card .client-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 1.1rem; font-weight: 600; color: #f0f0f0; }
+  .report-select-card .client-meta { font-size: .78rem; color: #888; margin-top: 3px; }
+
+  .report-output {
+    background: #1e1e1e; border: 1px solid #2e2e2e; border-top: 4px solid #ff6b00;
+    padding: 40px; margin-top: 24px; display: none; border-radius: 2px;
+  }
+  .report-header-block { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 28px; }
+  .report-co { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; color: #888; letter-spacing: .12em; }
+  .report-title-big { font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; font-weight: 700; margin: 8px 0 4px; color: #f0f0f0; }
+  .report-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 14px; font-size: .83rem; color: #ddd; }
+  .report-meta-grid span { color: #888; }
+
+  .report-section { margin-bottom: 24px; }
+  .report-section-title {
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .12em;
+    text-transform: uppercase; color: #ff6b00; border-bottom: 1px solid #2e2e2e;
+    padding-bottom: 6px; margin-bottom: 12px;
+  }
+  .report-body { font-size: .88rem; line-height: 1.7; color: #ccc; }
+
+  .risk-gauge {
+    display: flex; align-items: center; gap: 20px; padding: 20px;
+    background: #141414; border: 1px solid #2e2e2e; margin-bottom: 20px;
+  }
+  .gauge-score { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; }
+  .gauge-score.critical { color: var(--danger); }
+  .gauge-score.high { color: var(--warn); }
+  .gauge-score.moderate { color: #2ecc71; }
+  .gauge-score.low { color: #166534; }
+  .gauge-label { font-family: 'IBM Plex Mono', monospace; font-size: .75rem; text-transform: uppercase; }
+
+  .action-list { list-style: none; }
+  .action-list li { padding: 8px 0; border-bottom: 1px dotted #2e2e2e; font-size: .87rem; display: flex; gap: 10px; color: #ccc; }
+  .action-list li::before { content: '→'; color: #ff6b00; font-weight: bold; flex-shrink: 0; }
+
+  .report-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+
+  /* ── LOADING ── */
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: white;
+    border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── FILTER ROW ── */
+  .filter-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 6px 16px; font-size: .75rem; font-family: 'IBM Plex Mono', monospace;
+    border: 1px solid #333; background: #1e1e1e; color: #ccc; cursor: pointer;
+    transition: all .15s; border-radius: 1px;
+  }
+  .filter-btn:hover { border-color: #ff6b00; color: #ff6b00; }
+  .filter-btn.active { background: #ff6b00; color: white; border-color: #ff6b00; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: #1e1e1e; color: #f0f0f0; padding: 14px 22px;
+    font-family: 'IBM Plex Mono', monospace; font-size: .78rem;
+    border-left: 4px solid #ff6b00; display: none;
+    animation: slideIn .3s ease; z-index: 9999; box-shadow: 0 4px 30px rgba(0,0,0,.5);
+  }
+  @keyframes slideIn { from { transform: translateX(40px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+  /* ── CHECKLIST ── */
+  .checklist-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px; border: 1px solid #2e2e2e;
+    background: #1e1e1e; margin-bottom: 8px; cursor: pointer; border-radius: 2px; transition: all .15s;
+  }
+  .checklist-item:hover { border-color: #ff6b00; }
+  .checklist-item.done { background: #1a2a1a; border-color: #2d5a2d; }
+  .check-num {
+    width: 26px; height: 26px; flex-shrink: 0;
+    background: #333; color: #ccc;
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+  }
+  .checklist-item.done .check-num { background: #27ae60; color: white; }
+  .check-content .check-action { font-weight: 600; font-size: .88rem; color: #f0f0f0; }
+  .check-content .check-where { font-size: .76rem; color: #888; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
+  .checklist-item.done .check-action { text-decoration: line-through; color: #666; }
+
+  .progress-bar-wrap { background: #2e2e2e; height: 8px; border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #ff6b00; transition: width .4s; }
+  .progress-label { font-size: .75rem; color: #888; text-align: right; }
+
+  @media (max-width: 700px) {
+    .view { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .type-selector { grid-template-columns: 1fr; }
+    .header { padding: 14px 20px; }
+    .nav-btn { padding: 10px 14px; font-size: .6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-wrap">
+    <img src="data:image/jpeg;base64,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" class="logo-img" alt="Aviel Alpha Logo">
+    <div>
+      <div class="logo">Aviel Alpha <span>Secretaries</span></div>
+      <div class="tagline">Integrated Tax Service System</div>
+    </div>
+  </div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:#888;text-align:right;">
+    Business &amp; Individual<br>Unified Campaign
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showView('intake')">📋 Intake Form</button>
+  <button class="nav-btn" onclick="showView('dashboard')">📊 Dashboard</button>
+  <button class="nav-btn" onclick="showView('reports')">📄 Tax Reports</button>
+  <button class="nav-btn" onclick="showView('checklist')">✅ Setup Checklist</button>
+</div>
+
+<!-- ═══════════════ INTAKE FORM ═══════════════ -->
+<div id="view-intake" class="view active">
+  <div class="view-title">Tax Health Check Intake</div>
+  <div class="view-sub">Section 0 → Contact details, then choose your client type to unlock the relevant form path.</div>
+
+  <div class="form-card">
+    <div class="section-badge">SECTION 0</div>
+    <div class="section-title">Contact Information</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name <span class="req">★</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Chukwuemeka Okafor">
+      </div>
+      <div class="form-group">
+        <label>Email Address <span class="req">★</span></label>
+        <input type="email" id="f-email" placeholder="e.g. emeka@email.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone / WhatsApp <span class="req">★</span></label>
+        <input type="text" id="f-phone" placeholder="+234 801 234 5678">
+      </div>
+      <div class="form-group">
+        <label>State / Location <span class="req">★</span></label>
+        <input type="text" id="f-location" placeholder="e.g. Lagos">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">Client Type <span style="color:var(--gold)">★</span></div>
+    <p style="font-size:.82rem;color:#888;margin-bottom:18px;">This controls which sections of the form you will see.</p>
+
+    <div class="type-selector">
+      <div class="type-card" id="type-biz" onclick="selectType('business')">
+        <div class="icon">🏢</div>
+        <div class="label">Business / Company</div>
+        <div class="desc">Registered or informal businesses, companies, enterprises</div>
+      </div>
+      <div class="type-card" id="type-ind" onclick="selectType('individual')">
+        <div class="icon">👤</div>
+        <div class="label">Individual / Personal</div>
+        <div class="desc">Salaried employees, freelancers, self-employed persons</div>
+      </div>
+    </div>
+
+    <!-- BUSINESS PATH -->
+    <div id="business-path" class="hidden-section">
+      <div class="section-badge">SECTION 1B — BUSINESS DETAILS</div>
+      <div class="section-title">Business Information</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Business Name <span class="req">★</span></label>
+          <input type="text" id="b-name" placeholder="e.g. Horizon Tech Ltd">
+        </div>
+        <div class="form-group">
+          <label>Your Role / Position <span class="req">★</span></label>
+          <input type="text" id="b-role" placeholder="e.g. CEO / Director">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CAC Registration? <span class="req">★</span></label>
+          <div class="radio-group" id="b-cac">
+            <div class="radio-option" onclick="selectRadio('b-cac',this,'Yes')"><input type="radio">Yes</div>
+            <div class="radio-option" onclick="selectRadio('b-cac',this,'No')"><input type="radio">No</div>
+            <div class="radio-option" onclick="selectRadio('b-cac',this,'In Progress')"><input type="radio">In Progress</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>RC Number <span style="color:#888;font-weight:400">(if registered)</span></label>
+          <input type="text" id="b-rc" placeholder="RC 12345678">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Industry / Sector <span class="req">★</span></label>
+          <select id="b-industry">
+            <option value="">Select industry…</option>
+            <option>Legal Services</option><option>Technology</option><option>Trade & Retail</option>
+            <option>Real Estate</option><option>Healthcare</option><option>Education</option>
+            <option>Finance</option><option>Manufacturing</option><option>Agriculture</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Years Operating <span class="req">★</span></label>
+          <div class="radio-group" id="b-years">
+            <div class="radio-option" onclick="selectRadio('b-years',this,'<1yr')"><input type="radio">&lt;1 yr</div>
+            <div class="radio-option" onclick="selectRadio('b-years',this,'1-3yr')"><input type="radio">1–3 yrs</div>
+            <div class="radio-option" onclick="selectRadio('b-years',this,'3-5yr')"><input type="radio">3–5 yrs</div>
+            <div class="radio-option" onclick="selectRadio('b-years',this,'>5yr')"><input type="radio">&gt;5 yrs</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estimated Annual Revenue <span class="req">★</span></label>
+          <div class="radio-group" id="b-rev">
+            <div class="radio-option" onclick="selectRadio('b-rev',this,'<10M')"><input type="radio">Under ₦10M</div>
+            <div class="radio-option" onclick="selectRadio('b-rev',this,'10-50M')"><input type="radio">₦10M–₦50M</div>
+            <div class="radio-option" onclick="selectRadio('b-rev',this,'50-100M')"><input type="radio">₦50M–₦100M</div>
+            <div class="radio-option" onclick="selectRadio('b-rev',this,'>100M')"><input type="radio">Above ₦100M</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Number of Employees <span class="req">★</span></label>
+          <div class="radio-group" id="b-emp">
+            <div class="radio-option" onclick="selectRadio('b-emp',this,'0')"><input type="radio">0 (Solo)</div>
+            <div class="radio-option" onclick="selectRadio('b-emp',this,'1-5')"><input type="radio">1–5</div>
+            <div class="radio-option" onclick="selectRadio('b-emp',this,'6-20')"><input type="radio">6–20</div>
+            <div class="radio-option" onclick="selectRadio('b-emp',this,'21-50')"><input type="radio">21–50</div>
+            <div class="radio-option" onclick="selectRadio('b-emp',this,'50+')"><input type="radio">50+</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="section-badge">SECTION 2B — BUSINESS TAX PROFILE</div>
+      <div class="section-title">Tax Compliance Status</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Finance Tracking <span class="req">★</span></label>
+          <div class="radio-group" id="b-track">
+            <div class="radio-option" onclick="selectRadio('b-track',this,'Software')"><input type="radio">Accounting Software</div>
+            <div class="radio-option" onclick="selectRadio('b-track',this,'Spreadsheets')"><input type="radio">Spreadsheets</div>
+            <div class="radio-option" onclick="selectRadio('b-track',this,'Poor')"><input type="radio">Not well organised</div>
+            <div class="radio-option" onclick="selectRadio('b-track',this,'Bookkeeper')"><input type="radio">Bookkeeper</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tax Consultant? <span class="req">★</span></label>
+          <div class="radio-group" id="b-consult">
+            <div class="radio-option" onclick="selectRadio('b-consult',this,'Yes FT')"><input type="radio">Yes, full-time</div>
+            <div class="radio-option" onclick="selectRadio('b-consult',this,'Yes Occ')"><input type="radio">Occasionally</div>
+            <div class="radio-option" onclick="selectRadio('b-consult',this,'No')"><input type="radio">No</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Files Tax Returns? <span class="req">★</span></label>
+          <div class="radio-group" id="b-returns">
+            <div class="radio-option" onclick="selectRadio('b-returns',this,'Regularly')"><input type="radio">Yes, regularly</div>
+            <div class="radio-option" onclick="selectRadio('b-returns',this,'Sometimes')"><input type="radio">Sometimes</div>
+            <div class="radio-option" onclick="selectRadio('b-returns',this,'Never')"><input type="radio">Never filed</div>
+            <div class="radio-option" onclick="selectRadio('b-returns',this,'Unsure')"><input type="radio">Not sure</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tax Clearance Certificate <span class="req">★</span></label>
+          <div class="radio-group" id="b-tcc">
+            <div class="radio-option" onclick="selectRadio('b-tcc',this,'Valid')"><input type="radio">Valid</div>
+            <div class="radio-option" onclick="selectRadio('b-tcc',this,'Expired')"><input type="radio">Expired</div>
+            <div class="radio-option" onclick="selectRadio('b-tcc',this,'Never')"><input type="radio">Never obtained</div>
+            <div class="radio-option" onclick="selectRadio('b-tcc',this,'InProgress')"><input type="radio">In progress</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tax Audit / Query Received? <span class="req">★</span></label>
+          <div class="radio-group" id="b-audit">
+            <div class="radio-option" onclick="selectRadio('b-audit',this,'Yes')"><input type="radio">Yes</div>
+            <div class="radio-option" onclick="selectRadio('b-audit',this,'No')"><input type="radio">No</div>
+            <div class="radio-option" onclick="selectRadio('b-audit',this,'Unsure')"><input type="radio">Not sure</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Taxes Currently Filed <span class="req">★</span></label>
+          <div class="checkbox-group" id="b-taxes">
+            <div class="check-option" onclick="toggleCheck(this,'CIT')"><input type="checkbox">CIT</div>
+            <div class="check-option" onclick="toggleCheck(this,'VAT')"><input type="checkbox">VAT</div>
+            <div class="check-option" onclick="toggleCheck(this,'PAYE')"><input type="checkbox">PAYE</div>
+            <div class="check-option" onclick="toggleCheck(this,'WHT')"><input type="checkbox">WHT</div>
+            <div class="check-option" onclick="toggleCheck(this,'CGT')"><input type="checkbox">Capital Gains</div>
+            <div class="check-option" onclick="toggleCheck(this,'None')"><input type="checkbox">None</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Main Tax Concerns <span class="req">★</span></label>
+          <div class="checkbox-group" id="b-concerns">
+            <div class="check-option" onclick="toggleCheck(this,'Penalties')"><input type="checkbox">Avoiding penalties</div>
+            <div class="check-option" onclick="toggleCheck(this,'Audits')"><input type="checkbox">Tax audits</div>
+            <div class="check-option" onclick="toggleCheck(this,'Obligations')"><input type="checkbox">Understanding obligations</div>
+            <div class="check-option" onclick="toggleCheck(this,'Records')"><input type="checkbox">Record keeping</div>
+            <div class="check-option" onclick="toggleCheck(this,'VAT Compliance')"><input type="checkbox">VAT compliance</div>
+            <div class="check-option" onclick="toggleCheck(this,'PAYE Compliance')"><input type="checkbox">PAYE compliance</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Specific Tax Issue to Review <span class="req">★</span></label>
+          <textarea id="b-issue" placeholder="Describe any specific tax issue, concern, or question you'd like us to address…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- INDIVIDUAL PATH -->
+    <div id="individual-path" class="hidden-section">
+      <div class="section-badge">SECTION 1I — INDIVIDUAL DETAILS</div>
+      <div class="section-title">Personal Information</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Employment Status <span class="req">★</span></label>
+          <div class="radio-group" id="i-employ">
+            <div class="radio-option" onclick="selectRadio('i-employ',this,'Employed')"><input type="radio">Employed</div>
+            <div class="radio-option" onclick="selectRadio('i-employ',this,'Self-employed')"><input type="radio">Self-employed</div>
+            <div class="radio-option" onclick="selectRadio('i-employ',this,'Business owner')"><input type="radio">Business owner</div>
+            <div class="radio-option" onclick="selectRadio('i-employ',this,'Unemployed')"><input type="radio">Unemployed/Student</div>
+            <div class="radio-option" onclick="selectRadio('i-employ',this,'Retired')"><input type="radio">Retired</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Employer's Name <span style="color:#888;font-weight:400">(if employed)</span></label>
+          <input type="text" id="i-employer" placeholder="Company / Organisation name">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Primary Occupation / Field <span class="req">★</span></label>
+          <input type="text" id="i-occupation" placeholder="e.g. Software Engineer, Nurse, Trader">
+        </div>
+        <div class="form-group">
+          <label>State of Tax Residence <span class="req">★</span></label>
+          <select id="i-state">
+            <option value="">Select state…</option>
+            <option>Lagos</option><option>Abuja (FCT)</option><option>Rivers</option>
+            <option>Kano</option><option>Oyo</option><option>Delta</option><option>Anambra</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estimated Annual Income <span class="req">★</span></label>
+          <div class="radio-group" id="i-income">
+            <div class="radio-option" onclick="selectRadio('i-income',this,'<3M')"><input type="radio">Under ₦3M</div>
+            <div class="radio-option" onclick="selectRadio('i-income',this,'3-10M')"><input type="radio">₦3M–₦10M</div>
+            <div class="radio-option" onclick="selectRadio('i-income',this,'10-30M')"><input type="radio">₦10M–₦30M</div>
+            <div class="radio-option" onclick="selectRadio('i-income',this,'>30M')"><input type="radio">Above ₦30M</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="section-badge">SECTION 2I — INDIVIDUAL TAX PROFILE</div>
+      <div class="section-title">Personal Tax Compliance</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sources of Income <span class="req">★</span></label>
+          <div class="checkbox-group" id="i-sources">
+            <div class="check-option" onclick="toggleCheck(this,'Salary')"><input type="checkbox">Salary/Wages</div>
+            <div class="check-option" onclick="toggleCheck(this,'Freelance')"><input type="checkbox">Freelance/Contract</div>
+            <div class="check-option" onclick="toggleCheck(this,'Rental')"><input type="checkbox">Rental Income</div>
+            <div class="check-option" onclick="toggleCheck(this,'Business')"><input type="checkbox">Business Profits</div>
+            <div class="check-option" onclick="toggleCheck(this,'Investment')"><input type="checkbox">Investment Returns</div>
+            <div class="check-option" onclick="toggleCheck(this,'Foreign')"><input type="checkbox">Foreign Income</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>PAYE Deducted by Employer? <span class="req">★</span></label>
+          <div class="radio-group" id="i-paye">
+            <div class="radio-option" onclick="selectRadio('i-paye',this,'Yes')"><input type="radio">Yes</div>
+            <div class="radio-option" onclick="selectRadio('i-paye',this,'No')"><input type="radio">No</div>
+            <div class="radio-option" onclick="selectRadio('i-paye',this,'Unsure')"><input type="radio">Not sure</div>
+            <div class="radio-option" onclick="selectRadio('i-paye',this,'N/A')"><input type="radio">N/A</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Filed Tax Return Before? <span class="req">★</span></label>
+          <div class="radio-group" id="i-filed">
+            <div class="radio-option" onclick="selectRadio('i-filed',this,'Regularly')"><input type="radio">Yes, regularly</div>
+            <div class="radio-option" onclick="selectRadio('i-filed',this,'Once/twice')"><input type="radio">Once or twice</div>
+            <div class="radio-option" onclick="selectRadio('i-filed',this,'Never')"><input type="radio">Never</div>
+            <div class="radio-option" onclick="selectRadio('i-filed',this,'Unsure')"><input type="radio">Not sure</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Personal TCC Status <span class="req">★</span></label>
+          <div class="radio-group" id="i-tcc">
+            <div class="radio-option" onclick="selectRadio('i-tcc',this,'Valid')"><input type="radio">Valid</div>
+            <div class="radio-option" onclick="selectRadio('i-tcc',this,'Expired')"><input type="radio">Expired</div>
+            <div class="radio-option" onclick="selectRadio('i-tcc',this,'Never')"><input type="radio">Never obtained</div>
+            <div class="radio-option" onclick="selectRadio('i-tcc',this,'InProgress')"><input type="radio">In progress</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Have a TIN? <span class="req">★</span></label>
+          <div class="radio-group" id="i-tin">
+            <div class="radio-option" onclick="selectRadio('i-tin',this,'Yes')"><input type="radio">Yes</div>
+            <div class="radio-option" onclick="selectRadio('i-tin',this,'No')"><input type="radio">No</div>
+            <div class="radio-option" onclick="selectRadio('i-tin',this,'Unsure')"><input type="radio">Not sure</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tax Query / Notice Received? <span class="req">★</span></label>
+          <div class="radio-group" id="i-query">
+            <div class="radio-option" onclick="selectRadio('i-query',this,'Yes')"><input type="radio">Yes</div>
+            <div class="radio-option" onclick="selectRadio('i-query',this,'No')"><input type="radio">No</div>
+            <div class="radio-option" onclick="selectRadio('i-query',this,'Unsure')"><input type="radio">Not sure</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Main Personal Tax Concerns <span class="req">★</span></label>
+          <div class="checkbox-group" id="i-concerns">
+            <div class="check-option" onclick="toggleCheck(this,'Understanding obligations')"><input type="checkbox">Understanding obligations</div>
+            <div class="check-option" onclick="toggleCheck(this,'Getting TCC')"><input type="checkbox">Getting a TCC</div>
+            <div class="check-option" onclick="toggleCheck(this,'Avoiding penalties')"><input type="checkbox">Avoiding penalties</div>
+            <div class="check-option" onclick="toggleCheck(this,'Backlog returns')"><input type="checkbox">Backlog returns</div>
+            <div class="check-option" onclick="toggleCheck(this,'PAYE not remitted')"><input type="checkbox">PAYE not remitted</div>
+            <div class="check-option" onclick="toggleCheck(this,'Freelance taxation')"><input type="checkbox">Freelance taxation</div>
+            <div class="check-option" onclick="toggleCheck(this,'Foreign income')"><input type="checkbox">Foreign income</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Specific Tax Issue to Review <span class="req">★</span></label>
+          <textarea id="i-issue" placeholder="Describe any specific concern, e.g. unremitted PAYE, rental income, freelance fees not declared…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="submit-area" class="hidden-section" style="display:none;margin-top:24px;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="submitForm()" id="submit-btn">⚡ Generate Tax Health Report</button>
+        <span style="font-size:.75rem;color:#888;">AI-powered report will be generated and saved to dashboard</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div id="view-dashboard" class="view">
+  <div class="view-title">Tax Dashboard</div>
+  <div class="view-sub">All client submissions — Business &amp; Individual unified view.</div>
+
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-total">0</div>
+      <div class="stat-label">Total Clients</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-biz">0</div>
+      <div class="stat-label">Business Clients</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-ind">0</div>
+      <div class="stat-label">Individual Clients</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-value" id="stat-risk">0</div>
+      <div class="stat-label">High / Critical Risk</div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterDash('all',this)">All Clients</button>
+    <button class="filter-btn" onclick="filterDash('Business',this)">Business Only</button>
+    <button class="filter-btn" onclick="filterDash('Individual',this)">Individual Only</button>
+    <button class="filter-btn" onclick="filterDash('Critical',this)">Critical Risk</button>
+    <button class="filter-btn" onclick="filterDash('High',this)">High Risk</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Client Type</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>Role / Status</th>
+          <th>Revenue / Income</th>
+          <th>TCC</th>
+          <th>Risk Score</th>
+          <th>Risk Level</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="dash-tbody">
+        <tr><td colspan="11" style="text-align:center;color:#888;padding:40px;font-size:.85rem;">No submissions yet — fill in the Intake Form to get started.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ REPORTS ═══════════════ -->
+<div id="view-reports" class="view">
+  <div class="view-title">AI Tax Health Reports</div>
+  <div class="view-sub">Select a client to generate their personalised Tax Health Report using Claude AI.</div>
+
+  <div id="report-list">
+    <p style="color:#888;font-size:.85rem;">No submissions yet. Complete the intake form first.</p>
+  </div>
+
+  <div class="report-output" id="report-output">
+    <div class="report-header-block">
+      <div class="report-co">AVIEL ALPHA SECRETARIES LTD — CONFIDENTIAL</div>
+      <div class="report-title-big" id="rpt-title">Tax Health Report</div>
+      <div id="rpt-ref" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:#888;margin-top:4px;"></div>
+      <div class="report-meta-grid" id="rpt-meta"></div>
+    </div>
+
+    <div class="risk-gauge">
+      <div class="gauge-score" id="rpt-score-big">—</div>
+      <div>
+        <div class="gauge-label" id="rpt-risk-label">Risk Level</div>
+        <div style="font-size:.82rem;color:#888;margin-top:4px;">Tax Risk Score (0 = no risk, 100 = critical)</div>
+      </div>
+    </div>
+
+    <div id="rpt-body"></div>
+
+    <div class="report-actions">
+      <button class="btn-secondary" onclick="window.print()">🖨 Print Report</button>
+      <button class="btn-secondary" onclick="copyReport()">📋 Copy Text</button>
+      <button class="btn-primary" onclick="closeReport()">← Back to List</button>
+    </div>
+
+    <div style="margin-top:28px;padding:16px;background:#141414;border:1px solid #2e2e2e;font-size:.75rem;color:#888;line-height:1.6;">
+      <strong>Disclaimer:</strong> This report is based on information provided by the client. It does not constitute legal or tax advice. Errors or omissions in information provided may affect the accuracy of this assessment. Aviel Alpha Secretaries Ltd is not liable for decisions taken solely on the basis of this report.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CHECKLIST ═══════════════ -->
+<div id="view-checklist" class="view">
+  <div class="view-title">Implementation Checklist</div>
+  <div class="view-sub">Follow these steps in order to go live with the full integrated system. Click each item to mark it done.</div>
+
+  <div style="margin-bottom:24px;">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="check-progress" style="width:0%"></div></div>
+    <div class="progress-label"><span id="check-done">0</span> / 14 completed</div>
+  </div>
+
+  <div id="checklist-items"></div>
+</div>
+
+<div class="toast" id="toast">✓ Saved successfully</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// ⚠️  SETUP: Paste your Google Apps Script Web App URL below
+//    after deploying Code.gs (see deployment instructions)
+// ═══════════════════════════════════════════════════════════════
+const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxJgCbYssTIX0DkOJwtGszYHqiddLAOs-qEEkh_wfXfQm5tyfB_ZKgKmBTDdaG2M8Qv/exec';
+
+// ═══════════════ STATE ═══════════════
+let submissions = JSON.parse(localStorage.getItem('aviel_submissions') || '[]');
+let checklistState = JSON.parse(localStorage.getItem('aviel_checklist') || '{}');
+let currentType = null;
+let radioValues = {};
+let checkboxValues = {};
+
+// ═══════════════ NAV ═══════════════
+function showView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  event.target.classList.add('active');
+  if (v === 'dashboard') renderDashboard('all');
+  if (v === 'reports') renderReportList();
+  if (v === 'checklist') renderChecklist();
+}
+
+// ═══════════════ TYPE SELECTION ═══════════════
+function selectType(type) {
+  currentType = type;
+  document.getElementById('type-biz').classList.toggle('selected', type === 'business');
+  document.getElementById('type-ind').classList.toggle('selected', type === 'individual');
+
+  const bPath = document.getElementById('business-path');
+  const iPath = document.getElementById('individual-path');
+  bPath.className = type === 'business' ? 'visible-section' : 'hidden-section';
+  iPath.className = type === 'individual' ? 'visible-section' : 'hidden-section';
+  document.getElementById('submit-area').style.display = 'block';
+  document.getElementById('submit-area').className = 'visible-section';
+}
+
+// ═══════════════ FORM HELPERS ═══════════════
+function selectRadio(groupId, el, value) {
+  document.querySelectorAll('#' + groupId + ' .radio-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  radioValues[groupId] = value;
+}
+
+function toggleCheck(el, value) {
+  el.classList.toggle('selected');
+  const groupId = el.parentElement.id;
+  if (!checkboxValues[groupId]) checkboxValues[groupId] = [];
+  if (el.classList.contains('selected')) {
+    if (!checkboxValues[groupId].includes(value)) checkboxValues[groupId].push(value);
+  } else {
+    checkboxValues[groupId] = checkboxValues[groupId].filter(v => v !== value);
+  }
+}
+
+function gv(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+// ═══════════════ SCORE ENGINE ═══════════════
+function calcScore(data) {
+  let score = 0;
+  if (data.type === 'Business') {
+    if (data.cac === 'No') score += 10;
+    if (data.track === 'Poor') score += 10;
+    if (data.consult === 'No') score += 5;
+    if (data.returns === 'Never') score += 20;
+    else if (data.returns === 'Sometimes') score += 10;
+    if (data.tcc === 'Never') score += 15;
+    else if (data.tcc === 'Expired') score += 8;
+    if (data.audit === 'Yes') score += 20;
+    if (!data.taxes || data.taxes.includes('None') || data.taxes.length === 0) score += 15;
+  } else {
+    if (data.tin === 'No') score += 15;
+    if (data.paye === 'No') score += 10;
+    if (data.filed === 'Never') score += 20;
+    if (data.tcc === 'Never') score += 10;
+    if (data.query === 'Yes') score += 20;
+    const incSrc = data.incomeSources || [];
+    if (incSrc.includes('Freelance') || incSrc.includes('Rental') || incSrc.includes('Foreign')) score += 15;
+    if (incSrc.length > 2 && data.filed === 'Never') score += 10;
+  }
+  return Math.min(score, 100);
+}
+
+function riskLevel(score) {
+  if (score >= 60) return 'Critical';
+  if (score >= 35) return 'High';
+  if (score >= 15) return 'Moderate';
+  return 'Low';
+}
+
+// ═══════════════ SUBMIT ═══════════════
+async function submitForm() {
+  if (!currentType) { alert('Please select Business or Individual first.'); return; }
+  const name = gv('f-name'), email = gv('f-email'), phone = gv('f-phone'), location = gv('f-location');
+  if (!name || !email) { alert('Please fill in Full Name and Email Address.'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.innerHTML = '<span class="spinner"></span> Generating Report…';
+  btn.disabled = true;
+
+  let data = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    type: currentType === 'business' ? 'Business' : 'Individual',
+    name, email, phone, location
+  };
+
+  if (currentType === 'business') {
+    Object.assign(data, {
+      bizName: gv('b-name'), role: gv('b-role'),
+      cac: radioValues['b-cac'] || '', rc: gv('b-rc'),
+      industry: gv('b-industry'), years: radioValues['b-years'] || '',
+      revenue: radioValues['b-rev'] || '', employees: radioValues['b-emp'] || '',
+      track: radioValues['b-track'] || '', consult: radioValues['b-consult'] || '',
+      returns: radioValues['b-returns'] || '', tcc: radioValues['b-tcc'] || '',
+      audit: radioValues['b-audit'] || '',
+      taxes: checkboxValues['b-taxes'] || [],
+      concerns: checkboxValues['b-concerns'] || [],
+      issue: gv('b-issue')
+    });
+  } else {
+    Object.assign(data, {
+      employ: radioValues['i-employ'] || '', employer: gv('i-employer'),
+      occupation: gv('i-occupation'), state: gv('i-state'),
+      income: radioValues['i-income'] || '',
+      incomeSources: checkboxValues['i-sources'] || [],
+      paye: radioValues['i-paye'] || '', filed: radioValues['i-filed'] || '',
+      tcc: radioValues['i-tcc'] || '', tin: radioValues['i-tin'] || '',
+      query: radioValues['i-query'] || '',
+      concerns: checkboxValues['i-concerns'] || [],
+      issue: gv('i-issue')
+    });
+  }
+
+  data.score = calcScore(data);
+  data.risk = riskLevel(data.score);
+
+  // Generate AI report
+  try {
+    data.reportText = await generateAIReport(data);
+  } catch(e) {
+    data.reportText = generateFallbackReport(data);
+  }
+
+  submissions.push(data);
+  localStorage.setItem('aviel_submissions', JSON.stringify(submissions));
+
+  // Save to Google Sheet
+  try {
+    await saveToSheet(data);
+    showToast('✓ Saved to Google Sheet! Risk: ' + data.score + '/100 (' + data.risk + ')');
+  } catch(e) {
+    console.warn('Sheet save failed — data kept locally.', e);
+    showToast('✓ Saved locally. Sheet sync failed — check URL config.');
+  }
+
+  btn.innerHTML = '⚡ Generate Tax Health Report';
+  btn.disabled = false;
+
+  // Reset form
+  radioValues = {}; checkboxValues = {}; currentType = null;
+  document.getElementById('type-biz').classList.remove('selected');
+  document.getElementById('type-ind').classList.remove('selected');
+  document.getElementById('business-path').className = 'hidden-section';
+  document.getElementById('individual-path').className = 'hidden-section';
+  document.getElementById('submit-area').style.display = 'none';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-phone').value = '';
+  document.getElementById('f-location').value = '';
+}
+
+// ═══════════════ GOOGLE SHEETS SYNC ═══════════════
+async function saveToSheet(data) {
+  if (!SHEET_WEBHOOK_URL || SHEET_WEBHOOK_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    console.warn('Google Sheet URL not configured. Skipping sync.');
+    return;
+  }
+  const payload = {
+    timestamp:     data.timestamp,
+    clientType:    data.type,
+    fullName:      data.name,
+    email:         data.email,
+    phone:         data.phone,
+    location:      data.location,
+    // Business fields
+    bizName:       data.bizName    || '',
+    role:          data.role       || '',
+    cac:           data.cac        || '',
+    rc:            data.rc         || '',
+    industry:      data.industry   || '',
+    years:         data.years      || '',
+    revenue:       data.revenue    || '',
+    employees:     data.employees  || '',
+    track:         data.track      || '',
+    consult:       data.consult    || '',
+    returns:       data.returns    || '',
+    taxes:         (data.taxes     || []).join(', '),
+    tcc:           data.tcc        || '',
+    audit:         data.audit      || '',
+    concerns:      (data.concerns  || []).join(', '),
+    issue:         data.issue      || '',
+    // Individual fields
+    employ:        data.employ     || '',
+    employer:      data.employer   || '',
+    occupation:    data.occupation || '',
+    state:         data.state      || '',
+    income:        data.income     || '',
+    incomeSources: (data.incomeSources || []).join(', '),
+    paye:          data.paye       || '',
+    filed:         data.filed      || '',
+    tin:           data.tin        || '',
+    query:         data.query      || '',
+    // Scores
+    riskScore:     data.score,
+    riskLevel:     data.risk
+  };
+  await fetch(SHEET_WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+}
+
+// ═══════════════ AI REPORT GENERATION ═══════════════
+async function generateAIReport(data) {
+  const prompt = buildPrompt(data);
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const result = await response.json();
+  return result.content.map(c => c.text || '').join('');
+}
+
+function buildPrompt(d) {
+  if (d.type === 'Business') {
+    return `You are a senior Nigerian tax consultant at Aviel Alpha Secretaries Ltd. Write a concise, professional Tax Health Report for this business client. Use plain language, no markdown headers, just flowing professional paragraphs for each section numbered 1–8.
+
+Client: ${d.name} | Business: ${d.bizName || 'N/A'} | Industry: ${d.industry || 'N/A'} | Revenue: ${d.revenue} | Employees: ${d.employees} | CAC: ${d.cac} | Years: ${d.years} | Finance tracking: ${d.track} | Tax consultant: ${d.consult} | Files returns: ${d.returns} | TCC: ${d.tcc} | Tax audit received: ${d.audit} | Taxes filed: ${(d.taxes||[]).join(', ')||'None'} | Concerns: ${(d.concerns||[]).join(', ')||'None'} | Specific issue: ${d.issue||'None'} | Risk Score: ${d.score}/100 (${d.risk})
+
+Write sections: 1. Executive Summary  2. Business Registration Status  3. Tax Compliance Overview  4. Tax Clearance Certificate Status  5. Audit & Query Risk  6. Compliance Gaps & Risk Areas  7. Recommendations (Immediate / 90-day / Long-term)  8. How Aviel Alpha Can Help. Keep total under 600 words. Professional, direct, actionable.`;
+  } else {
+    return `You are a senior Nigerian tax consultant at Aviel Alpha Secretaries Ltd. Write a concise professional Individual Tax Health Report. Plain paragraphs numbered 1–8, no markdown.
+
+Client: ${d.name} | Employment: ${d.employ} | Employer: ${d.employer||'N/A'} | Occupation: ${d.occupation||'N/A'} | State: ${d.state} | Income range: ${d.income} | Income sources: ${(d.incomeSources||[]).join(', ')||'N/A'} | PAYE deducted: ${d.paye} | Filed returns before: ${d.filed} | TCC: ${d.tcc} | TIN: ${d.tin} | Tax query received: ${d.query} | Concerns: ${(d.concerns||[]).join(', ')||'None'} | Specific issue: ${d.issue||'None'} | Risk Score: ${d.score}/100 (${d.risk})
+
+Write sections: 1. Executive Summary  2. Tax Identification Number (TIN) Status  3. PAYE Compliance Review  4. Income Sources Assessment  5. Tax Clearance Certificate Status  6. Filing History & Compliance Gap  7. Risk Areas & Recommendations  8. How Aviel Alpha Can Help. Under 600 words. Professional, clear, actionable for a Nigerian individual taxpayer.`;
+  }
+}
+
+function generateFallbackReport(d) {
+  const isBiz = d.type === 'Business';
+  return `1. Executive Summary\nBased on the information provided, ${d.name}${isBiz ? ' (' + (d.bizName||'') + ')' : ''} presents a ${d.risk} tax compliance risk with a score of ${d.score}/100. ${d.risk === 'Critical' || d.risk === 'High' ? 'Immediate attention is required to address several compliance gaps.' : 'There are areas for improvement that should be addressed in the coming months.'}\n\n2. ${isBiz ? 'Business Registration & Compliance Status' : 'TIN Status'}\n${isBiz ? `CAC registration status: ${d.cac}. ${d.cac === 'No' ? 'Registration with the Corporate Affairs Commission is strongly advised to formalise operations and tax obligations.' : 'Business registration is in order.'}` : `TIN status: ${d.tin}. ${d.tin === 'No' ? 'TIN registration with the Joint Tax Board (JTB) is the first and most critical step — without it, no tax compliance can proceed.' : 'TIN appears to be in place.'}`}\n\n3. ${isBiz ? 'Tax Return Filing History' : 'PAYE & Filing Compliance'}\n${isBiz ? `The business ${d.returns === 'Never' ? 'has never filed tax returns. This creates significant exposure to penalties under CITA and FIRS regulations.' : d.returns === 'Sometimes' ? 'files returns inconsistently, which creates gaps and potential penalties.' : 'has a regular filing history, which is positive.'}` : `PAYE deduction status: ${d.paye}. Personal income tax filing history: ${d.filed}. ${d.filed === 'Never' ? 'Non-filing of personal returns carries penalties under PITA and should be addressed urgently.' : ''}`}\n\n4. Tax Clearance Certificate\nTCC Status: ${d.tcc}. ${d.tcc === 'Never' ? 'A TCC has never been obtained. This is a significant gap — TCCs are required for government contracts, bank loans, and travel documentation.' : d.tcc === 'Expired' ? 'The TCC has expired and should be renewed immediately.' : d.tcc === 'Valid' ? 'A valid TCC is in place — this is excellent.' : 'TCC is in progress.'}\n\n5. Risk Areas Identified\n${d.risk === 'Critical' ? 'CRITICAL: Multiple serious compliance failures detected. Immediate engagement with a tax professional is essential to avoid enforcement action.' : d.risk === 'High' ? 'HIGH: Several compliance gaps exist that could result in penalties if not addressed promptly.' : 'MODERATE: Some areas need attention but overall risk is manageable.'}\n\n6. Recommendations\nImmediate: ${d.tcc !== 'Valid' ? 'Initiate TCC application. ' : ''}${isBiz && d.returns === 'Never' ? 'Begin back-filing of outstanding returns. ' : ''}${!isBiz && d.tin === 'No' ? 'Register for TIN immediately. ' : ''}Address any audit queries.\n\nWithin 90 days: Establish regular filing schedule. Organise financial records. Engage a tax consultant if not already done.\n\nLong-term: Maintain annual compliance calendar. Keep TCC renewed. Engage proactively with relevant tax authority.\n\n7. How Aviel Alpha Can Help\nAviel Alpha Secretaries Ltd can assist with TIN registration, TCC processing, back-filing of outstanding returns, FIRS correspondence, and ongoing tax advisory. Contact us to schedule a full consultation.`;
+}
+
+// ═══════════════ DASHBOARD ═══════════════
+function renderDashboard(filter) {
+  const tbody = document.getElementById('dash-tbody');
+  let data = submissions;
+  if (filter === 'Business') data = data.filter(d => d.type === 'Business');
+  else if (filter === 'Individual') data = data.filter(d => d.type === 'Individual');
+  else if (filter === 'Critical') data = data.filter(d => d.risk === 'Critical');
+  else if (filter === 'High') data = data.filter(d => d.risk === 'High');
+
+  // Stats
+  document.getElementById('stat-total').textContent = submissions.length;
+  document.getElementById('stat-biz').textContent = submissions.filter(d => d.type === 'Business').length;
+  document.getElementById('stat-ind').textContent = submissions.filter(d => d.type === 'Individual').length;
+  document.getElementById('stat-risk').textContent = submissions.filter(d => d.risk === 'Critical' || d.risk === 'High').length;
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#888;padding:40px;font-size:.85rem;">No submissions found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map((d, i) => {
+    const riskClass = d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate';
+    const fillClass = d.risk === 'Critical' ? 'fill-critical' : d.risk === 'High' ? 'fill-high' : 'fill-moderate';
+    const typeClass = d.type === 'Business' ? 'badge-business' : 'badge-individual';
+    const roleDisplay = d.type === 'Business' ? (d.role || '—') : (d.employ || '—');
+    const revenueDisplay = d.type === 'Business' ? (d.revenue || '—') : (d.income || '—');
+    return `<tr>
+      <td style="color:#888;font-family:'IBM Plex Mono',monospace;font-size:.7rem;">${i+1}</td>
+      <td><span class="badge ${typeClass}">${d.type}</span></td>
+      <td><strong>${d.name}</strong></td>
+      <td style="font-size:.78rem;">${d.email}</td>
+      <td>${d.location || '—'}</td>
+      <td style="font-size:.82rem;">${roleDisplay}</td>
+      <td style="font-size:.82rem;">${revenueDisplay}</td>
+      <td><span class="badge badge-${d.tcc === 'Valid' ? 'moderate' : 'high'}">${d.tcc || '—'}</span></td>
+      <td>
+        <div class="score-bar">
+          <div class="score-track"><div class="score-fill ${fillClass}" style="width:${d.score}%"></div></div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.72rem;min-width:24px;">${d.score}</span>
+        </div>
+      </td>
+      <td><span class="badge badge-${riskClass}">${d.risk}</span></td>
+      <td><button class="btn-secondary" style="padding:5px 12px;font-size:.65rem;" onclick="viewReport(${d.id})">Report</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterDash(f, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard(f);
+}
+
+// ═══════════════ REPORTS ═══════════════
+function renderReportList() {
+  const list = document.getElementById('report-list');
+  document.getElementById('report-output').style.display = 'none';
+  if (!submissions.length) {
+    list.innerHTML = '<p style="color:#888;font-size:.85rem;">No submissions yet. Complete the intake form first.</p>';
+    return;
+  }
+  list.innerHTML = submissions.map(d => {
+    const riskClass = d.risk === 'Critical' ? 'badge-critical' : d.risk === 'High' ? 'badge-high' : 'badge-moderate';
+    return `<div class="report-select-card" onclick="viewReport(${d.id})">
+      <div>
+        <div class="client-name">${d.name} ${d.type === 'Business' && d.bizName ? '— ' + d.bizName : ''}</div>
+        <div class="client-meta">${d.type} · ${d.location || '—'} · Submitted ${d.timestamp}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:600;">${d.score}/100</span>
+        <span class="badge ${riskClass}">${d.risk}</span>
+        <button class="btn-secondary" style="padding:6px 14px;font-size:.7rem;">View Report →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function viewReport(id) {
+  const d = submissions.find(s => s.id === id);
+  if (!d) return;
+
+  document.getElementById('report-list').style.display = 'none';
+  const out = document.getElementById('report-output');
+  out.style.display = 'block';
+
+  const rptType = d.type === 'Business' ? 'BUSINESS TAX HEALTH REPORT' : 'INDIVIDUAL TAX HEALTH REPORT';
+  const refNo = d.type === 'Business' ? `BTR-${new Date().getFullYear()}-${String(d.id).slice(-4)}` : `ITR-${new Date().getFullYear()}-${String(d.id).slice(-4)}`;
+
+  document.getElementById('rpt-title').textContent = rptType;
+  document.getElementById('rpt-ref').textContent = `Report Ref: ${refNo} | Prepared by: Aviel Alpha Secretaries Ltd`;
+
+  document.getElementById('rpt-meta').innerHTML = `
+    <div><span>Client Name:</span> <strong>${d.name}</strong></div>
+    <div><span>Date:</span> <strong>${d.timestamp}</strong></div>
+    <div><span>Type:</span> <strong>${d.type}</strong></div>
+    <div><span>Location:</span> <strong>${d.location || '—'}</strong></div>
+    ${d.type === 'Business' ? `<div><span>Business:</span> <strong>${d.bizName || '—'}</strong></div><div><span>Revenue:</span> <strong>${d.revenue || '—'}</strong></div>` : `<div><span>Employment:</span> <strong>${d.employ || '—'}</strong></div><div><span>Income:</span> <strong>${d.income || '—'}</strong></div>`}
+  `;
+
+  const scoreEl = document.getElementById('rpt-score-big');
+  scoreEl.textContent = d.score;
+  const riskClass = d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate';
+  scoreEl.className = 'gauge-score ' + riskClass;
+  document.getElementById('rpt-risk-label').textContent = d.risk + ' Risk';
+
+  const body = document.getElementById('rpt-body');
+  if (d.reportText) {
+    const paragraphs = d.reportText.split('\n').filter(p => p.trim());
+    body.innerHTML = paragraphs.map(p => {
+      if (/^\d+\./.test(p.trim())) {
+        const [num, ...rest] = p.trim().split(/\.\s+/);
+        return `<div class="report-section"><div class="report-section-title">${num}. ${rest.join('. ').split('\n')[0]}</div><div class="report-body">${rest.join('. ').substring(rest.join('. ').indexOf('\n')+1) || ''}</div></div>`;
+      }
+      return `<div class="report-body" style="margin-bottom:14px;">${p}</div>`;
+    }).join('');
+  } else {
+    body.innerHTML = '<p style="color:#888;">Generating report…</p>';
+  }
+
+  out.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeReport() {
+  document.getElementById('report-output').style.display = 'none';
+  document.getElementById('report-list').style.display = 'block';
+}
+
+function copyReport() {
+  const text = document.getElementById('rpt-body').innerText;
+  navigator.clipboard.writeText(text).then(() => showToast('✓ Report copied to clipboard'));
+}
+
+// ═══════════════ CHECKLIST ═══════════════
+const CHECKLIST = [
+  { action: 'Open the existing Business Tax Health Check Form in Google Forms', where: 'Google Forms' },
+  { action: "Add 'Client Type' question at top (after name/email) — Multiple choice: Business / Individual", where: 'Google Forms → Add question' },
+  { action: 'Enable Section Branching: Business → Sections 1B & 2B, Individual → Sections 1I & 2I', where: 'Google Forms → Go to section based on answer' },
+  { action: 'Add all Individual-path questions from Section 2 of the document', where: 'Copy field by field from Section 2' },
+  { action: "Add 'Client Type' column to Google Sheet (Column B)", where: "Google Sheets — tag existing rows as 'Business'" },
+  { action: "Add 'Employment Status' and 'Has TIN?' columns for Individual rows", where: 'Google Sheets' },
+  { action: "Rename column 'Position in the Business' to 'Position / Role'", where: 'Google Sheets' },
+  { action: "Rename 'Estimated Annual Revenue' to 'Annual Revenue / Income Range'", where: 'Google Sheets' },
+  { action: "Create new sheet tab: 'Individual Tax Dashboard' with FILTER formula", where: "=FILTER('Form Responses 1'!A:AC, 'Form Responses 1'!B:B=\"Individual\")" },
+  { action: "Create the Individual Tax Health Report template in a new Google Doc", where: 'Copy Section 3 content — save as template' },
+  { action: 'Add Individual Tax Services section to the Service Positioning Doc', where: 'Copy Section 5 content into existing Google Doc' },
+  { action: 'Update Auto-Report generation logic to branch by Client Type', where: 'Zapier / Apps Script — check if branching is set up' },
+  { action: 'Test the full flow end-to-end: submit as both Business and Individual', where: 'Use test email addresses' },
+  { action: "Update external links and WhatsApp campaigns to reference 'Business & Individual'", where: 'WhatsApp, email campaigns, website if applicable' }
+];
+
+function renderChecklist() {
+  const container = document.getElementById('checklist-items');
+  container.innerHTML = CHECKLIST.map((item, i) => {
+    const done = checklistState[i] || false;
+    return `<div class="checklist-item ${done ? 'done' : ''}" onclick="toggleCheck2(${i})">
+      <div class="check-num">${done ? '✓' : i+1}</div>
+      <div class="check-content">
+        <div class="check-action">${item.action}</div>
+        <div class="check-where">📍 ${item.where}</div>
+      </div>
+    </div>`;
+  }).join('');
+  updateChecklistProgress();
+}
+
+function toggleCheck2(i) {
+  checklistState[i] = !checklistState[i];
+  localStorage.setItem('aviel_checklist', JSON.stringify(checklistState));
+  renderChecklist();
+}
+
+function updateChecklistProgress() {
+  const done = Object.values(checklistState).filter(Boolean).length;
+  const pct = Math.round((done / 14) * 100);
+  document.getElementById('check-progress').style.width = pct + '%';
+  document.getElementById('check-done').textContent = done;
+}
+
+// ═══════════════ TOAST ═══════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// Init
+renderChecklist();
+</script>
+</body>
+</html>
