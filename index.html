@@ -303,28 +303,43 @@
   }
   @keyframes slideIn { from { transform: translateX(40px); opacity:0; } to { transform:translateX(0); opacity:1; } }
 
-  /* ── CHECKLIST ── */
-  .checklist-item {
-    display: flex; align-items: flex-start; gap: 14px;
-    padding: 14px 16px; border: 1px solid #2e2e2e;
-    background: #1e1e1e; margin-bottom: 8px; cursor: pointer; border-radius: 2px; transition: all .15s;
+  /* ── CONSENT BLOCK ── */
+  .consent-block {
+    background: #141414;
+    border: 1px solid #2e2e2e;
+    border-left: 3px solid #ff6b00;
+    padding: 18px;
+    margin-bottom: 20px;
+    font-size: .82rem;
+    color: #ccc;
+    line-height: 1.6;
+    border-radius: 2px;
   }
-  .checklist-item:hover { border-color: #ff6b00; }
-  .checklist-item.done { background: #1a2a1a; border-color: #2d5a2d; }
-  .check-num {
-    width: 26px; height: 26px; flex-shrink: 0;
-    background: #333; color: #ccc;
-    font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
-    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+  .consent-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .12em;
+    color: #ff6b00;
+    margin-bottom: 10px;
   }
-  .checklist-item.done .check-num { background: #27ae60; color: white; }
-  .check-content .check-action { font-weight: 600; font-size: .88rem; color: #f0f0f0; }
-  .check-content .check-where { font-size: .76rem; color: #888; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
-  .checklist-item.done .check-action { text-decoration: line-through; color: #666; }
-
-  .progress-bar-wrap { background: #2e2e2e; height: 8px; border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; background: #ff6b00; transition: width .4s; }
-  .progress-label { font-size: .75rem; color: #888; text-align: right; }
+  .consent-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: #f0f0f0;
+    margin-top: 8px;
+  }
+  .consent-check input {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    accent-color: #ff6b00;
+    cursor: pointer;
+  }
 
   @media (max-width: 700px) {
     .view { padding: 20px; }
@@ -340,7 +355,7 @@
 
 <div class="header">
   <div class="logo-wrap">
-    <img src="data:image/jpeg;base64,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" class="logo-img" alt="Aviel Alpha Logo">
+    <img src="data:image/jpeg;base64,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" class="logo-img" alt="Aviel Alpha Logo">
     <div>
       <div class="logo">Aviel Alpha <span>Secretaries</span></div>
       <div class="tagline">Integrated Tax Service System</div>
@@ -355,7 +370,6 @@
   <button class="nav-btn active" onclick="showView('intake')">📋 Intake Form</button>
   <button class="nav-btn" onclick="showView('dashboard')">📊 Dashboard</button>
   <button class="nav-btn" onclick="showView('reports')">📄 Tax Reports</button>
-  <button class="nav-btn" onclick="showView('checklist')">✅ Setup Checklist</button>
 </div>
 
 <!-- ═══════════════ INTAKE FORM ═══════════════ -->
@@ -693,9 +707,18 @@
     </div>
 
     <div id="submit-area" class="hidden-section" style="display:none;margin-top:24px;">
+      <div class="consent-block">
+        <div class="consent-title">DATA PROTECTION &amp; CONSENT</div>
+        <p style="margin-bottom:10px;">By submitting this form, you confirm that the information provided is accurate and complete to the best of your knowledge, and you consent to Aviel Alpha Secretaries Ltd processing this data for the purpose of preparing your Tax Health Report and related tax advisory services.</p>
+        <p style="margin-bottom:4px;">Your data is handled in accordance with the Nigeria Data Protection Act (NDPA) 2023. It is stored securely, used only for the purposes stated, and never shared with third parties without your explicit consent. You may request deletion of your data at any time by emailing <strong style="color:#ff8c33;">privacy@avielalpha.com</strong>.</p>
+        <label class="consent-check">
+          <input type="checkbox" id="consent-box">
+          <span style="font-size:.85rem;">I confirm the information above is accurate and I consent to Aviel Alpha processing my data as described. <span style="color:#ff6b00;">★</span></span>
+        </label>
+      </div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <button class="btn-primary" onclick="submitForm()" id="submit-btn">⚡ Generate Tax Health Report</button>
-        <span style="font-size:.75rem;color:#888;">AI-powered report will be generated and saved to dashboard</span>
+        <span style="font-size:.75rem;color:#888;">Your report will be generated and sent to your email within minutes.</span>
       </div>
     </div>
   </div>
@@ -759,8 +782,8 @@
 
 <!-- ═══════════════ REPORTS ═══════════════ -->
 <div id="view-reports" class="view">
-  <div class="view-title">AI Tax Health Reports</div>
-  <div class="view-sub">Select a client to generate their personalised Tax Health Report using Claude AI.</div>
+  <div class="view-title">Tax Health Reports</div>
+  <div class="view-sub">Select a client to generate their personalised Tax Health Report.</div>
 
   <div id="report-list">
     <p style="color:#888;font-size:.85rem;">No submissions yet. Complete the intake form first.</p>
@@ -796,31 +819,11 @@
   </div>
 </div>
 
-<!-- ═══════════════ CHECKLIST ═══════════════ -->
-<div id="view-checklist" class="view">
-  <div class="view-title">Implementation Checklist</div>
-  <div class="view-sub">Follow these steps in order to go live with the full integrated system. Click each item to mark it done.</div>
-
-  <div style="margin-bottom:24px;">
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="check-progress" style="width:0%"></div></div>
-    <div class="progress-label"><span id="check-done">0</span> / 14 completed</div>
-  </div>
-
-  <div id="checklist-items"></div>
-</div>
-
 <div class="toast" id="toast">✓ Saved successfully</div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// ⚠️  SETUP: Paste your Google Apps Script Web App URL below
-//    after deploying Code.gs (see deployment instructions)
-// ═══════════════════════════════════════════════════════════════
-const SHEET_WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
-
 // ═══════════════ STATE ═══════════════
 let submissions = JSON.parse(localStorage.getItem('aviel_submissions') || '[]');
-let checklistState = JSON.parse(localStorage.getItem('aviel_checklist') || '{}');
 let currentType = null;
 let radioValues = {};
 let checkboxValues = {};
@@ -833,7 +836,6 @@ function showView(v) {
   event.target.classList.add('active');
   if (v === 'dashboard') renderDashboard('all');
   if (v === 'reports') renderReportList();
-  if (v === 'checklist') renderChecklist();
 }
 
 // ═══════════════ TYPE SELECTION ═══════════════
@@ -908,6 +910,7 @@ async function submitForm() {
   if (!currentType) { alert('Please select Business or Individual first.'); return; }
   const name = gv('f-name'), email = gv('f-email'), phone = gv('f-phone'), location = gv('f-location');
   if (!name || !email) { alert('Please fill in Full Name and Email Address.'); return; }
+  if (!document.getElementById('consent-box').checked) { alert('Please tick the consent checkbox to submit.'); return; }
 
   const btn = document.getElementById('submit-btn');
   btn.innerHTML = '<span class="spinner"></span> Generating Report…';
@@ -950,9 +953,9 @@ async function submitForm() {
   data.score = calcScore(data);
   data.risk = riskLevel(data.score);
 
-  // Generate AI report
+  // Generate report via server-side proxy
   try {
-    data.reportText = await generateAIReport(data);
+    data.reportText = await generateReport(data);
   } catch(e) {
     data.reportText = generateFallbackReport(data);
   }
@@ -960,13 +963,13 @@ async function submitForm() {
   submissions.push(data);
   localStorage.setItem('aviel_submissions', JSON.stringify(submissions));
 
-  // Save to Google Sheet
+  // Save to Google Sheet via server-side proxy
   try {
     await saveToSheet(data);
-    showToast('✓ Saved to Google Sheet! Risk: ' + data.score + '/100 (' + data.risk + ')');
+    showToast('✓ Submission saved! Risk: ' + data.score + '/100 (' + data.risk + ')');
   } catch(e) {
     console.warn('Sheet save failed — data kept locally.', e);
-    showToast('✓ Saved locally. Sheet sync failed — check URL config.');
+    showToast('✓ Saved locally. Sync failed — please contact admin.');
   }
 
   btn.innerHTML = '⚡ Generate Tax Health Report';
@@ -979,69 +982,61 @@ async function submitForm() {
   document.getElementById('business-path').className = 'hidden-section';
   document.getElementById('individual-path').className = 'hidden-section';
   document.getElementById('submit-area').style.display = 'none';
+  document.getElementById('consent-box').checked = false;
   document.getElementById('f-name').value = '';
   document.getElementById('f-email').value = '';
   document.getElementById('f-phone').value = '';
   document.getElementById('f-location').value = '';
 }
 
-// ═══════════════ GOOGLE SHEETS SYNC ═══════════════
+// ═══════════════ GOOGLE SHEETS SYNC (via server-side proxy) ═══════════════
 async function saveToSheet(data) {
-  if (!SHEET_WEBHOOK_URL || SHEET_WEBHOOK_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
-    console.warn('Google Sheet URL not configured. Skipping sync.');
-    return;
-  }
   const payload = {
-    timestamp:     data.timestamp,
-    clientType:    data.type,
-    fullName:      data.name,
-    email:         data.email,
-    phone:         data.phone,
-    location:      data.location,
-    // Business fields
-    bizName:       data.bizName    || '',
-    role:          data.role       || '',
-    cac:           data.cac        || '',
-    rc:            data.rc         || '',
-    industry:      data.industry   || '',
-    years:         data.years      || '',
-    revenue:       data.revenue    || '',
-    employees:     data.employees  || '',
-    track:         data.track      || '',
-    consult:       data.consult    || '',
-    returns:       data.returns    || '',
-    taxes:         (data.taxes     || []).join(', '),
-    tcc:           data.tcc        || '',
-    audit:         data.audit      || '',
-    concerns:      (data.concerns  || []).join(', '),
-    issue:         data.issue      || '',
-    // Individual fields
-    employ:        data.employ     || '',
-    employer:      data.employer   || '',
-    occupation:    data.occupation || '',
-    state:         data.state      || '',
-    income:        data.income     || '',
+    timestamp: data.timestamp,
+    clientType: data.type,
+    fullName: data.name,
+    email: data.email,
+    phone: data.phone,
+    location: data.location,
+    bizName: data.bizName || '',
+    role: data.role || '',
+    cac: data.cac || '',
+    rc: data.rc || '',
+    industry: data.industry || '',
+    years: data.years || '',
+    revenue: data.revenue || '',
+    employees: data.employees || '',
+    track: data.track || '',
+    consult: data.consult || '',
+    returns: data.returns || '',
+    taxes: (data.taxes || []).join(', '),
+    tcc: data.tcc || '',
+    audit: data.audit || '',
+    concerns: (data.concerns || []).join(', '),
+    issue: data.issue || '',
+    employ: data.employ || '',
+    employer: data.employer || '',
+    occupation: data.occupation || '',
+    state: data.state || '',
+    income: data.income || '',
     incomeSources: (data.incomeSources || []).join(', '),
-    paye:          data.paye       || '',
-    filed:         data.filed      || '',
-    tin:           data.tin        || '',
-    query:         data.query      || '',
-    // Scores
-    riskScore:     data.score,
-    riskLevel:     data.risk,
-    // AI Report
-    reportText:    data.reportText || ''
+    paye: data.paye || '',
+    filed: data.filed || '',
+    tin: data.tin || '',
+    query: data.query || '',
+    riskScore: data.score,
+    riskLevel: data.risk,
+    reportText: data.reportText || ''
   };
-  await fetch(SHEET_WEBHOOK_URL, {
+  await fetch('/api/submit', {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
 }
 
-// ═══════════════ AI REPORT GENERATION ═══════════════
-async function generateAIReport(data) {
+// ═══════════════ REPORT GENERATION (via server-side proxy) ═══════════════
+async function generateReport(data) {
   const prompt = buildPrompt(data);
   const response = await fetch("/api/report", {
     method: "POST",
@@ -1086,7 +1081,6 @@ function renderDashboard(filter) {
   else if (filter === 'Critical') data = data.filter(d => d.risk === 'Critical');
   else if (filter === 'High') data = data.filter(d => d.risk === 'High');
 
-  // Stats
   document.getElementById('stat-total').textContent = submissions.length;
   document.getElementById('stat-biz').textContent = submissions.filter(d => d.type === 'Business').length;
   document.getElementById('stat-ind').textContent = submissions.filter(d => d.type === 'Individual').length;
@@ -1209,52 +1203,6 @@ function copyReport() {
   navigator.clipboard.writeText(text).then(() => showToast('✓ Report copied to clipboard'));
 }
 
-// ═══════════════ CHECKLIST ═══════════════
-const CHECKLIST = [
-  { action: 'Open the existing Business Tax Health Check Form in Google Forms', where: 'Google Forms' },
-  { action: "Add 'Client Type' question at top (after name/email) — Multiple choice: Business / Individual", where: 'Google Forms → Add question' },
-  { action: 'Enable Section Branching: Business → Sections 1B & 2B, Individual → Sections 1I & 2I', where: 'Google Forms → Go to section based on answer' },
-  { action: 'Add all Individual-path questions from Section 2 of the document', where: 'Copy field by field from Section 2' },
-  { action: "Add 'Client Type' column to Google Sheet (Column B)", where: "Google Sheets — tag existing rows as 'Business'" },
-  { action: "Add 'Employment Status' and 'Has TIN?' columns for Individual rows", where: 'Google Sheets' },
-  { action: "Rename column 'Position in the Business' to 'Position / Role'", where: 'Google Sheets' },
-  { action: "Rename 'Estimated Annual Revenue' to 'Annual Revenue / Income Range'", where: 'Google Sheets' },
-  { action: "Create new sheet tab: 'Individual Tax Dashboard' with FILTER formula", where: "=FILTER('Form Responses 1'!A:AC, 'Form Responses 1'!B:B=\"Individual\")" },
-  { action: "Create the Individual Tax Health Report template in a new Google Doc", where: 'Copy Section 3 content — save as template' },
-  { action: 'Add Individual Tax Services section to the Service Positioning Doc', where: 'Copy Section 5 content into existing Google Doc' },
-  { action: 'Update Auto-Report generation logic to branch by Client Type', where: 'Zapier / Apps Script — check if branching is set up' },
-  { action: 'Test the full flow end-to-end: submit as both Business and Individual', where: 'Use test email addresses' },
-  { action: "Update external links and WhatsApp campaigns to reference 'Business & Individual'", where: 'WhatsApp, email campaigns, website if applicable' }
-];
-
-function renderChecklist() {
-  const container = document.getElementById('checklist-items');
-  container.innerHTML = CHECKLIST.map((item, i) => {
-    const done = checklistState[i] || false;
-    return `<div class="checklist-item ${done ? 'done' : ''}" onclick="toggleCheck2(${i})">
-      <div class="check-num">${done ? '✓' : i+1}</div>
-      <div class="check-content">
-        <div class="check-action">${item.action}</div>
-        <div class="check-where">📍 ${item.where}</div>
-      </div>
-    </div>`;
-  }).join('');
-  updateChecklistProgress();
-}
-
-function toggleCheck2(i) {
-  checklistState[i] = !checklistState[i];
-  localStorage.setItem('aviel_checklist', JSON.stringify(checklistState));
-  renderChecklist();
-}
-
-function updateChecklistProgress() {
-  const done = Object.values(checklistState).filter(Boolean).length;
-  const pct = Math.round((done / 14) * 100);
-  document.getElementById('check-progress').style.width = pct + '%';
-  document.getElementById('check-done').textContent = done;
-}
-
 // ═══════════════ TOAST ═══════════════
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1262,9 +1210,6 @@ function showToast(msg) {
   t.style.display = 'block';
   setTimeout(() => t.style.display = 'none', 3000);
 }
-
-// Init
-renderChecklist();
 </script>
 </body>
 </html>
