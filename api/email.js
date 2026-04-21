@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ═══════════════ CONFIG ═══════════════
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Aviel Alpha <onboarding@resend.dev>';
-const BCC_ADMIN = process.env.ADMIN_EMAIL || 'avielalphasecretaries@gmail.com';
+const BCC_ADMIN = process.env.ADMIN_EMAIL || 'sprqsm001@gmail.com';
 const ALLOWED_ORIGINS = [
   'https://yourdomain.com',
   'https://www.yourdomain.com',
