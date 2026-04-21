@@ -6,7 +6,7 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ═══════════════ CONFIG ═══════════════
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Aviel Alpha <reports@aasecretaries.com.ng>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Aviel Alpha <hello@aasecretaries.com.ng>';
 const BCC_ADMIN = process.env.ADMIN_EMAIL || 'sprqsm001@gmail.com';
 const ALLOWED_ORIGINS = [
   'https://aasecretaries.com.ng',
