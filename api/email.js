@@ -6,11 +6,11 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ═══════════════ CONFIG ═══════════════
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Aviel Alpha <onboarding@resend.dev>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Aviel Alpha <reports@aasecretaries.com.ng>';
 const BCC_ADMIN = process.env.ADMIN_EMAIL || 'sprqsm001@gmail.com';
 const ALLOWED_ORIGINS = [
-  'https://yourdomain.com',
-  'https://www.yourdomain.com',
+  'https://aasecretaries.com.ng',
+  'https://www.aasecretaries.com.ng',
   'http://localhost:3000',
   'http://localhost:5173'
 ];
