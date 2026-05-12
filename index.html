@@ -376,6 +376,8 @@
 
 <div class="nav">
   <button class="nav-btn active" onclick="showView('intake')">📋 Intake Form</button>
+  <button class="nav-btn" onclick="showView('corporate')">🏢 Corporate Consultation</button>
+  <button class="nav-btn" onclick="showView('legal')">⚖️ Legal Consultation</button>
   <button class="nav-btn" onclick="showView('dashboard')">📊 Dashboard</button>
   <button class="nav-btn" onclick="showView('reports')">📄 Tax Reports</button>
 </div>
@@ -732,6 +734,142 @@
   </div>
 </div>
 
+<!-- ═══════════════ CORPORATE CONSULTATION ═══════════════ -->
+<div id="view-corporate" class="view">
+  <div class="view-title">International Corporate Consultation</div>
+  <div class="view-sub">Schedule a structured advisory session for international business matters.</div>
+
+  <div class="form-card">
+    <div class="section-badge">SECTION 1 — CLIENT DETAILS</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name <span class="req">★</span></label>
+        <input type="text" id="c-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="c-company" placeholder="Company name (optional)">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Country of Residence / Incorporation <span class="req">★</span></label>
+        <input type="text" id="c-country" placeholder="e.g. United Kingdom">
+      </div>
+      <div class="form-group">
+        <label>Email Address <span class="req">★</span></label>
+        <input type="email" id="c-email" placeholder="email@address.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>WhatsApp Number <span class="req">★</span></label>
+        <input type="text" id="c-whatsapp" placeholder="+1 234 567 8900">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-badge">SECTION 2 — SERVICE TYPE</div>
+    <div class="form-group">
+      <label>Nature of Enquiry <span class="req">★</span></label>
+      <div class="radio-group" id="c-enquiry">
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Company Incorporation')"><input type="radio">Company Incorporation in Nigeria</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Foreign Company')"><input type="radio">Foreign Company Registration</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Compliance')"><input type="radio">Post-Incorporation Compliance</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Annual Returns')"><input type="radio">Annual Returns Filing</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Governance')"><input type="radio">Corporate Governance Advisory</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Regulatory')"><input type="radio">Regulatory Filings</div>
+        <div class="radio-option" onclick="selectRadio('c-enquiry',this,'Other')"><input type="radio">Other</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-badge">SECTION 3 — MATTER SUMMARY</div>
+    <div class="form-group">
+      <label>Matter Summary <span class="req">★</span></label>
+      <textarea id="c-summary" placeholder="Kindly summarise your matter clearly in 5 to 10 sentences..."></textarea>
+    </div>
+
+    <div class="consent-block" style="margin-top:24px;">
+      <div class="consent-title">CONSULTATION ACKNOWLEDGMENT</div>
+      <label class="consent-check">
+        <input type="checkbox" id="c-ack">
+        <span style="font-size:.85rem;">I understand that consultations are paid (₦50,000 for 30 mins / ₦100,000 for 60 mins) and will only be scheduled upon confirmation of payment. <span class="req">★</span></span>
+      </label>
+    </div>
+
+    <button class="btn-primary" onclick="submitConsultation('corporate')" id="c-submit-btn">⚡ Request Corporate Consultation</button>
+  </div>
+</div>
+
+<!-- ═══════════════ LEGAL CONSULTATION ═══════════════ -->
+<div id="view-legal" class="view">
+  <div class="view-title">Legal Consultation Request</div>
+  <div class="view-sub">Aviel Avenante Law Practice (aaLawsng) — Structured Legal Advisory.</div>
+
+  <div class="form-card">
+    <div class="section-badge">SECTION 1 — CLIENT DETAILS</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name <span class="req">★</span></label>
+        <input type="text" id="l-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Organisation / Company Name</label>
+        <input type="text" id="l-org" placeholder="Organisation name (optional)">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Country <span class="req">★</span></label>
+        <input type="text" id="l-country" placeholder="e.g. Nigeria">
+      </div>
+      <div class="form-group">
+        <label>Email Address <span class="req">★</span></label>
+        <input type="email" id="l-email" placeholder="email@address.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone / WhatsApp Number <span class="req">★</span></label>
+        <input type="text" id="l-phone" placeholder="+234 ...">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-badge">SECTION 2 — AREA OF LAW</div>
+    <div class="form-group">
+      <label>Nature of Legal Matter <span class="req">★</span></label>
+      <div class="radio-group" id="l-matter">
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Corporate & Commercial')"><input type="radio">Corporate & Commercial Law</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Governance')"><input type="radio">Corporate Governance & Compliance</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Real Estate')"><input type="radio">Real Estate & Property</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Debt Recovery')"><input type="radio">Debt Recovery</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Secretarial')"><input type="radio">Company Secretarial Matters</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Dispute Resolution')"><input type="radio">Litigation / Dispute Resolution</div>
+        <div class="radio-option" onclick="selectRadio('l-matter',this,'Other')"><input type="radio">Other</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-badge">SECTION 3 — MATTER SUMMARY</div>
+    <div class="form-group">
+      <label>Matter Summary <span class="req">★</span></label>
+      <textarea id="l-summary" placeholder="Kindly summarise your matter clearly in 5 to 10 sentences..."></textarea>
+    </div>
+
+    <div class="consent-block" style="margin-top:24px;">
+      <div class="consent-title">CONSULTATION ACKNOWLEDGMENT</div>
+      <label class="consent-check">
+        <input type="checkbox" id="l-ack">
+        <span style="font-size:.85rem;">I understand that legal consultations are paid (₦50,000 for 30 mins / ₦100,000 for 60 mins) and will only be scheduled upon confirmation of payment. <span class="req">★</span></span>
+      </label>
+    </div>
+
+    <button class="btn-primary" onclick="submitConsultation('legal')" id="l-submit-btn">⚡ Request Legal Consultation</button>
+  </div>
+</div>
+
 <!-- ═══════════════ DASHBOARD ═══════════════ -->
 <div id="view-dashboard" class="view">
   <div class="view-title">Tax Dashboard</div>
@@ -839,9 +977,13 @@ let checkboxValues = {};
 // ═══════════════ NAV ═══════════════
 function showView(v) {
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('view-' + v).classList.add('active');
-  event.target.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(el => {
+    el.classList.remove('active');
+    if (el.getAttribute('onclick').includes(`'${v}'`)) el.classList.add('active');
+  });
+  const targetView = document.getElementById('view-' + v);
+  if (targetView) targetView.classList.add('active');
+  
   if (v === 'dashboard') renderDashboard('all');
   if (v === 'reports') renderReportList();
 }
@@ -913,6 +1055,54 @@ function riskLevel(score) {
   return 'Low';
 }
 
+async function submitConsultation(type) {
+  const prefix = type === 'corporate' ? 'c' : 'l';
+  const name = gv(prefix + '-name'), email = gv(prefix + '-email');
+  const summary = gv(prefix + '-summary');
+  const ack = document.getElementById(prefix + '-ack').checked;
+
+  if (!name || !email || !summary) { alert('Please fill in all required fields.'); return; }
+  if (!ack) { alert('Please acknowledge the consultation fee.'); return; }
+
+  const btn = document.getElementById(prefix + '-submit-btn');
+  btn.innerHTML = '<span class="spinner"></span> Sending Request…';
+  btn.disabled = true;
+
+  const data = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    type: type === 'corporate' ? 'Corporate Consultation' : 'Legal Consultation',
+    name, email,
+    summary,
+    whatsapp: gv(prefix + (type === 'corporate' ? '-whatsapp' : '-phone')),
+    location: gv(prefix + (type === 'corporate' ? '-country' : '-country')),
+    details: type === 'corporate' ? {
+      company: gv('c-company'),
+      enquiry: radioValues['c-enquiry'] || 'General'
+    } : {
+      organisation: gv('l-org'),
+      matterType: radioValues['l-matter'] || 'General'
+    }
+  };
+
+  try {
+    await saveToSheet(data);
+    await sendEmail(data);
+    showToast('✓ Consultation request sent! We will contact you shortly.');
+    // Reset form
+    document.querySelectorAll(`#view-${type} input`).forEach(i => i.value = '');
+    document.querySelectorAll(`#view-${type} textarea`).forEach(i => i.value = '');
+    document.querySelectorAll(`#view-${type} .radio-option`).forEach(o => o.classList.remove('selected'));
+    document.getElementById(prefix + '-ack').checked = false;
+  } catch (e) {
+    console.error('Consultation submission error:', e);
+    showToast('❌ Submission failed. Please try again.');
+  }
+
+  btn.innerHTML = `⚡ Request ${type === 'corporate' ? 'Corporate' : 'Legal'} Consultation`;
+  btn.disabled = false;
+}
+
 // ═══════════════ SUBMIT ═══════════════
 async function submitForm() {
   if (!currentType) { alert('Please select Business or Individual first.'); return; }
@@ -971,12 +1161,13 @@ async function submitForm() {
   submissions.push(data);
   localStorage.setItem('aviel_submissions', JSON.stringify(submissions));
 
-  // Save to Google Sheet via server-side proxy
+  // Save to Google Sheet & Send Email
   try {
     await saveToSheet(data);
-    showToast('✓ Submission saved! Risk: ' + data.score + '/100 (' + data.risk + ')');
+    await sendEmail(data);
+    showToast('✓ Submission saved & Email sent! Risk: ' + data.score + '/100 (' + data.risk + ')');
   } catch(e) {
-    console.warn('Sheet save failed — data kept locally.', e);
+    console.warn('Sync failed — data kept locally.', e);
     showToast('✓ Saved locally. Sync failed — please contact admin.');
   }
 
@@ -1043,6 +1234,25 @@ async function saveToSheet(data) {
   });
 }
 
+async function sendEmail(data) {
+  const isConsult = data.type.includes('Consultation');
+  const payload = {
+    to: data.email,
+    subject: isConsult ? `Consultation Request: ${data.type}` : `Your Tax Health Report — Aviel Alpha`,
+    clientName: data.name,
+    score: data.score || 0,
+    risk: data.risk || 'Request',
+    reportText: isConsult ? `NATURE OF ENQUIRY: ${data.details?.enquiry || data.details?.matterType}\n\nMATTER SUMMARY:\n${data.summary}\n\nOur team will review your request and send payment instructions shortly.` : data.reportText,
+    message: isConsult ? `Thank you for requesting a ${data.type}. We have received your details and are reviewing your matter.` : `Please find your Tax Health Report below.`
+  };
+
+  await fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+}
+
 // ═══════════════ REPORT GENERATION (via server-side proxy) ═══════════════
 async function generateReport(data) {
   const prompt = buildPrompt(data);
@@ -1100,11 +1310,15 @@ function renderDashboard(filter) {
   }
 
   tbody.innerHTML = data.map((d, i) => {
-    const riskClass = d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate';
-    const fillClass = d.risk === 'Critical' ? 'fill-critical' : d.risk === 'High' ? 'fill-high' : 'fill-moderate';
-    const typeClass = d.type === 'Business' ? 'badge-business' : 'badge-individual';
-    const roleDisplay = d.type === 'Business' ? (d.role || '—') : (d.employ || '—');
-    const revenueDisplay = d.type === 'Business' ? (d.revenue || '—') : (d.income || '—');
+    const isConsult = d.type.includes('Consultation');
+    const riskClass = isConsult ? 'low' : (d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate');
+    const fillClass = isConsult ? '' : (d.risk === 'Critical' ? 'fill-critical' : d.risk === 'High' ? 'fill-high' : 'fill-moderate');
+    const typeClass = d.type === 'Business' ? 'badge-business' : (d.type === 'Individual' ? 'badge-individual' : 'badge-moderate');
+    const roleDisplay = d.type === 'Business' ? (d.role || '—') : (d.type === 'Individual' ? (d.employ || '—') : (d.details?.enquiry || d.details?.matterType || '—'));
+    const revenueDisplay = d.type === 'Business' ? (d.revenue || '—') : (d.type === 'Individual' ? (d.income || '—') : 'Consultation');
+    const scoreDisplay = isConsult ? '—' : d.score;
+    const riskDisplay = isConsult ? 'Request' : d.risk;
+    const tccDisplay = isConsult ? '—' : (d.tcc || '—');
     return `<tr>
       <td style="color:#888;font-family:'IBM Plex Mono',monospace;font-size:.7rem;">${i+1}</td>
       <td><span class="badge ${typeClass}">${d.type}</span></td>
@@ -1113,15 +1327,15 @@ function renderDashboard(filter) {
       <td>${d.location || '—'}</td>
       <td style="font-size:.82rem;">${roleDisplay}</td>
       <td style="font-size:.82rem;">${revenueDisplay}</td>
-      <td><span class="badge badge-${d.tcc === 'Valid' ? 'moderate' : 'high'}">${d.tcc || '—'}</span></td>
+      <td><span class="badge badge-${tccDisplay === 'Valid' ? 'moderate' : 'high'}">${tccDisplay}</span></td>
       <td>
         <div class="score-bar">
-          <div class="score-track"><div class="score-fill ${fillClass}" style="width:${d.score}%"></div></div>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:.72rem;min-width:24px;">${d.score}</span>
+          <div class="score-track"><div class="score-fill ${fillClass}" style="width:${isConsult ? 0 : d.score}%"></div></div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.72rem;min-width:24px;">${scoreDisplay}</span>
         </div>
       </td>
-      <td><span class="badge badge-${riskClass}">${d.risk}</span></td>
-      <td><button class="btn-secondary" style="padding:5px 12px;font-size:.65rem;" onclick="viewReport(${d.id})">Report</button></td>
+      <td><span class="badge badge-${riskClass}">${riskDisplay}</span></td>
+      <td><button class="btn-secondary" style="padding:5px 12px;font-size:.65rem;" onclick="viewReport(${d.id})">${isConsult ? 'Details' : 'Report'}</button></td>
     </tr>`;
   }).join('');
 }
@@ -1140,17 +1354,20 @@ function renderReportList() {
     list.innerHTML = '<p style="color:#888;font-size:.85rem;">No submissions yet. Complete the intake form first.</p>';
     return;
   }
-  list.innerHTML = submissions.map(d => {
-    const riskClass = d.risk === 'Critical' ? 'badge-critical' : d.risk === 'High' ? 'badge-high' : 'badge-moderate';
+    list.innerHTML = submissions.map(d => {
+    const isConsult = d.type.includes('Consultation');
+    const riskClass = isConsult ? 'badge-moderate' : (d.risk === 'Critical' ? 'badge-critical' : d.risk === 'High' ? 'badge-high' : 'badge-moderate');
+    const scoreLabel = isConsult ? 'NEW' : `${d.score}/100`;
+    const riskLabel = isConsult ? 'Consultation' : d.risk;
     return `<div class="report-select-card" onclick="viewReport(${d.id})">
       <div>
         <div class="client-name">${d.name} ${d.type === 'Business' && d.bizName ? '— ' + d.bizName : ''}</div>
         <div class="client-meta">${d.type} · ${d.location || '—'} · Submitted ${d.timestamp}</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:600;">${d.score}/100</span>
-        <span class="badge ${riskClass}">${d.risk}</span>
-        <button class="btn-secondary" style="padding:6px 14px;font-size:.7rem;">View Report →</button>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:600;">${scoreLabel}</span>
+        <span class="badge ${riskClass}">${riskLabel}</span>
+        <button class="btn-secondary" style="padding:6px 14px;font-size:.7rem;">${isConsult ? 'View Details →' : 'View Report →'}</button>
       </div>
     </div>`;
   }).join('');
@@ -1164,28 +1381,61 @@ function viewReport(id) {
   const out = document.getElementById('report-output');
   out.style.display = 'block';
 
-  const rptType = d.type === 'Business' ? 'BUSINESS TAX HEALTH REPORT' : 'INDIVIDUAL TAX HEALTH REPORT';
-  const refNo = d.type === 'Business' ? `BTR-${new Date().getFullYear()}-${String(d.id).slice(-4)}` : `ITR-${new Date().getFullYear()}-${String(d.id).slice(-4)}`;
+  const isConsult = d.type.includes('Consultation');
+  const rptType = isConsult ? d.type.toUpperCase() : (d.type === 'Business' ? 'BUSINESS TAX HEALTH REPORT' : 'INDIVIDUAL TAX HEALTH REPORT');
+  const refNo = isConsult ? `REQ-${new Date().getFullYear()}-${String(d.id).slice(-4)}` : (d.type === 'Business' ? `BTR-${new Date().getFullYear()}-${String(d.id).slice(-4)}` : `ITR-${new Date().getFullYear()}-${String(d.id).slice(-4)}`);
 
   document.getElementById('rpt-title').textContent = rptType;
-  document.getElementById('rpt-ref').textContent = `Report Ref: ${refNo} | Prepared by: Aviel Alpha Secretaries Ltd`;
+  document.getElementById('rpt-ref').textContent = `Ref: ${refNo} | Prepared by: Aviel Alpha Secretaries Ltd`;
 
-  document.getElementById('rpt-meta').innerHTML = `
+  let metaHTML = `
     <div><span>Client Name:</span> <strong>${d.name}</strong></div>
     <div><span>Date:</span> <strong>${d.timestamp}</strong></div>
     <div><span>Type:</span> <strong>${d.type}</strong></div>
     <div><span>Location:</span> <strong>${d.location || '—'}</strong></div>
-    ${d.type === 'Business' ? `<div><span>Business:</span> <strong>${d.bizName || '—'}</strong></div><div><span>Revenue:</span> <strong>${d.revenue || '—'}</strong></div>` : `<div><span>Employment:</span> <strong>${d.employ || '—'}</strong></div><div><span>Income:</span> <strong>${d.income || '—'}</strong></div>`}
   `;
+  if (d.type === 'Business') {
+    metaHTML += `<div><span>Business:</span> <strong>${d.bizName || '—'}</strong></div><div><span>Revenue:</span> <strong>${d.revenue || '—'}</strong></div>`;
+  } else if (d.type === 'Individual') {
+    metaHTML += `<div><span>Employment:</span> <strong>${d.employ || '—'}</strong></div><div><span>Income:</span> <strong>${d.income || '—'}</strong></div>`;
+  } else {
+    metaHTML += `<div><span>WhatsApp:</span> <strong>${d.whatsapp || '—'}</strong></div>`;
+    if (d.details?.company) metaHTML += `<div><span>Company:</span> <strong>${d.details.company}</strong></div>`;
+    if (d.details?.organisation) metaHTML += `<div><span>Org:</span> <strong>${d.details.organisation}</strong></div>`;
+  }
+  document.getElementById('rpt-meta').innerHTML = metaHTML;
 
   const scoreEl = document.getElementById('rpt-score-big');
-  scoreEl.textContent = d.score;
-  const riskClass = d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate';
-  scoreEl.className = 'gauge-score ' + riskClass;
-  document.getElementById('rpt-risk-label').textContent = d.risk + ' Risk';
+  const riskLabel = document.getElementById('rpt-risk-label');
+  
+  if (isConsult) {
+    scoreEl.textContent = 'REQ';
+    scoreEl.className = 'gauge-score moderate';
+    riskLabel.textContent = 'Consultation Request';
+  } else {
+    scoreEl.textContent = d.score;
+    const riskClass = d.risk === 'Critical' ? 'critical' : d.risk === 'High' ? 'high' : 'moderate';
+    scoreEl.className = 'gauge-score ' + riskClass;
+    riskLabel.textContent = d.risk + ' Risk';
+  }
 
   const body = document.getElementById('rpt-body');
-  if (d.reportText) {
+  if (isConsult) {
+    body.innerHTML = `
+      <div class="report-section">
+        <div class="report-section-title">1. NATURE OF ENQUIRY</div>
+        <div class="report-body">${d.details?.enquiry || d.details?.matterType || 'General Consultation'}</div>
+      </div>
+      <div class="report-section">
+        <div class="report-section-title">2. MATTER SUMMARY</div>
+        <div class="report-body" style="white-space:pre-wrap;">${d.summary || 'No summary provided.'}</div>
+      </div>
+      <div class="report-section">
+        <div class="report-section-title">3. NEXT STEPS</div>
+        <div class="report-body">Our team will review your request and send payment instructions for the consultation fee within 24 hours. Once payment is confirmed, we will schedule your session.</div>
+      </div>
+    `;
+  } else if (d.reportText) {
     const paragraphs = d.reportText.split('\n').filter(p => p.trim());
     body.innerHTML = paragraphs.map(p => {
       if (/^\d+\./.test(p.trim())) {
