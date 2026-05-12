@@ -1,7 +1,7 @@
 // api/email.js — Vercel Serverless Function
 // Sends Tax Health Reports via Resend
 
-import { Resend } from 'resend';
+const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -33,7 +33,7 @@ function isRateLimited(ip) {
 }
 
 // ═══════════════ HANDLER ═══════════════
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS
   const origin = req.headers.origin;
   if (ALLOWED_ORIGINS.includes(origin)) {
