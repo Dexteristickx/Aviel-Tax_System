@@ -1,18 +1,11 @@
 {
   "name": "aviel-alpha-tax-system",
   "version": "1.0.0",
-  "description": "Integrated Tax Health Check and Consultation Booking System for Aviel Alpha Secretaries Ltd",
   "type": "module",
-  "main": "index.html",
-  "scripts": {
-    "start": "vercel dev",
-    "build": "echo 'No build step required'",
-    "deploy": "vercel --prod"
-  },
   "dependencies": {
     "resend": "^3.2.0"
   },
-  "devDependencies": {
-    "vercel": "^34.2.0"
+  "engines": {
+    "node": ">=18"
   }
 }
