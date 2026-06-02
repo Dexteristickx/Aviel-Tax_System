@@ -349,6 +349,85 @@
     cursor: pointer;
   }
 
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .wa-popup {
+    background: #1e1e1e;
+    border: 1px solid #2e2e2e;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+    min-width: 220px;
+    animation: fadeIn .25s ease;
+  }
+  .wa-popup.open { display: flex; }
+  .wa-popup-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #888;
+    border-bottom: 1px solid #2e2e2e;
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+  }
+  .wa-contact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #141414;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #f0f0f0;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .wa-contact:hover {
+    border-color: #25d366;
+    background: #1a2e1a;
+    color: #25d366;
+  }
+  .wa-contact .wa-icon { font-size: 1.2rem; }
+  .wa-contact .wa-num { font-family: 'IBM Plex Mono', monospace; font-size: .78rem; color: #aaa; margin-top: 1px; }
+  .wa-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,.4);
+    transition: transform .2s, box-shadow .2s;
+    font-size: 1.6rem;
+  }
+  .wa-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(37,211,102,.55);
+  }
+  .wa-btn .wa-x { display: none; }
+  .wa-btn.open .wa-w { display: none; }
+  .wa-btn.open .wa-x { display: block; font-size: 1.3rem; }
+
   @media (max-width: 700px) {
     .view { padding: 20px; }
     .form-row { grid-template-columns: 1fr; }
@@ -1468,6 +1547,48 @@ function showToast(msg) {
   t.style.display = 'block';
   setTimeout(() => t.style.display = 'none', 3000);
 }
+</script>
+
+<!-- ═══════════════ WHATSAPP FLOAT ═══════════════ -->
+<div class="wa-float" id="wa-float">
+  <div class="wa-popup" id="wa-popup">
+    <div class="wa-popup-title">💬 Chat with us on WhatsApp</div>
+    <a class="wa-contact" href="https://wa.me/2347072752983" target="_blank" rel="noopener">
+      <span class="wa-icon">📞</span>
+      <div>
+        <div>Line 1</div>
+        <div class="wa-num">0707 275 2983</div>
+      </div>
+    </a>
+    <a class="wa-contact" href="https://wa.me/2349019011976" target="_blank" rel="noopener">
+      <span class="wa-icon">📞</span>
+      <div>
+        <div>Line 2</div>
+        <div class="wa-num">0901 901 1976</div>
+      </div>
+    </a>
+  </div>
+  <button class="wa-btn" id="wa-toggle-btn" onclick="toggleWA()" title="Chat on WhatsApp">
+    <span class="wa-w">💬</span>
+    <span class="wa-x">✕</span>
+  </button>
+</div>
+
+<script>
+function toggleWA() {
+  const popup = document.getElementById('wa-popup');
+  const btn   = document.getElementById('wa-toggle-btn');
+  const open  = popup.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+// Close popup when clicking outside
+document.addEventListener('click', function(e) {
+  const float = document.getElementById('wa-float');
+  if (!float.contains(e.target)) {
+    document.getElementById('wa-popup').classList.remove('open');
+    document.getElementById('wa-toggle-btn').classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
