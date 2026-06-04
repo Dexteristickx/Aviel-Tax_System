@@ -2,6 +2,7 @@
 // Sends Tax Health Reports via Resend
 
 const { Resend } = require('resend');
+const { generatePdfBuffer } = require('./_lib/pdf-generator');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -52,7 +53,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { to, subject, message, reportText, clientName, score, risk } = req.body || {};
+    const { to, subject, message, reportText, clientName, score, risk, submission } = req.body || {};
 
     // ── Validation ──
     if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
@@ -85,6 +86,21 @@ module.exports = async function handler(req, res) {
       risk: risk || 'Moderate'
     });
 
+    // ── Generate PDF Attachment if submission data is present ──
+    const attachments = [];
+    if (submission && typeof submission === 'object') {
+      try {
+        const pdfBuffer = await generatePdfBuffer(submission);
+        const safeName = (clientName || 'client').toLowerCase().replace(/\s+/g, '-');
+        attachments.push({
+          filename: `tax-report-${safeName}.pdf`,
+          content: pdfBuffer
+        });
+      } catch (pdfErr) {
+        console.error('Failed to generate PDF attachment for email:', pdfErr);
+      }
+    }
+
     // ── Send via Resend ──
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
@@ -93,7 +109,8 @@ module.exports = async function handler(req, res) {
       subject: subject.slice(0, 200),
       html,
       text,
-      reply_to: BCC_ADMIN
+      reply_to: BCC_ADMIN,
+      attachments
     });
 
     if (error) {
