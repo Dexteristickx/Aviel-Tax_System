@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import IntakeForm from './components/IntakeForm';
-import ConsultationForm from './components/ConsultationForm';
 import Dashboard from './components/Dashboard';
 import ReportView from './components/ReportView';
 import AuthModal from './components/AuthModal';
@@ -229,53 +228,6 @@ Write sections: 1. Executive Summary  2. Tax Identification Number (TIN) Status 
     setCurrentView('report');
   };
 
-  const handleConsultSubmit = async (consultData, resetCallback) => {
-    setLoading(true);
-
-    // Save locally
-    const updated = [consultData, ...submissions];
-    setSubmissions(updated);
-    localStorage.setItem('aviel_submissions', JSON.stringify(updated));
-
-    // Save in Supabase database if logged in
-    if (user && isSupabaseConfigured) {
-      try {
-        await supabase.from('submissions').insert([consultData]);
-      } catch (e) {
-        console.warn('Failed to insert record in cloud database:', e);
-      }
-    }
-
-    // Sync webhook & email
-    try {
-      await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(consultData)
-      });
-
-      await fetch('/api/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: consultData.email,
-          subject: `Consultation Request: ${consultData.type}`,
-          clientName: consultData.name,
-          score: 0,
-          risk: 'Request',
-          reportText: `NATURE OF ENQUIRY: ${consultData.details?.enquiry || consultData.details?.matterType}\n\nMATTER SUMMARY:\n${consultData.summary}\n\nOur team will review your request and send payment instructions shortly.`,
-          message: `Thank you for requesting a ${consultData.type}. We have received your details and are reviewing your matter.`
-        })
-      });
-    } catch (e) {
-      console.warn('Failed to sync webhook/email triggers:', e);
-    }
-
-    setLoading(false);
-    resetCallback();
-    setCurrentView('dashboard');
-  };
-
   return (
     <div>
       {/* Header */}
@@ -310,8 +262,6 @@ Write sections: 1. Executive Summary  2. Tax Identification Number (TIN) Status 
       <div className="nav">
         {[
           { key: 'intake', label: '📋 Intake Form' },
-          { key: 'corporate', label: '🏢 Corporate Consultation' },
-          { key: 'legal', label: '⚖️ Legal Consultation' },
           { key: 'dashboard', label: '📊 Dashboard' }
         ].map(tab => (
           <button 
@@ -330,25 +280,58 @@ Write sections: 1. Executive Summary  2. Tax Identification Number (TIN) Status 
       {/* Views */}
       <div className="view-container">
         {currentView === 'intake' && !selectedSubmission && (
-          <IntakeForm onSubmit={handleIntakeSubmit} loading={loading} user={user} />
-        )}
-        
-        {currentView === 'corporate' && (
-          <ConsultationForm type="corporate" onSubmit={handleConsultSubmit} loading={loading} />
-        )}
-
-        {currentView === 'legal' && (
-          <ConsultationForm type="legal" onSubmit={handleConsultSubmit} loading={loading} />
+          user ? (
+            <IntakeForm onSubmit={handleIntakeSubmit} loading={loading} user={user} />
+          ) : (
+            <div className="auth-gate">
+              <div className="auth-gate-icon">🔐</div>
+              <h2 className="auth-gate-title">Sign In Required</h2>
+              <p className="auth-gate-sub">
+                To access the Tax Health Intake Form and have your reports saved securely to your account,
+                please sign in or create a free account.
+              </p>
+              <div className="auth-gate-actions">
+                <button
+                  className="btn-primary"
+                  onClick={() => setIsAuthOpen(true)}
+                >
+                  Sign In / Create Account
+                </button>
+              </div>
+              <p className="auth-gate-note">
+                Your reports will be accessible from any device once you are signed in.
+              </p>
+            </div>
+          )
         )}
 
         {currentView === 'dashboard' && !selectedSubmission && (
-          <Dashboard 
-            submissions={submissions} 
-            onViewReport={(sub) => {
-              setSelectedSubmission(sub);
-              setCurrentView('report');
-            }} 
-          />
+          user ? (
+            <Dashboard 
+              submissions={submissions} 
+              onViewReport={(sub) => {
+                setSelectedSubmission(sub);
+                setCurrentView('report');
+              }} 
+            />
+          ) : (
+            <div className="auth-gate">
+              <div className="auth-gate-icon">📊</div>
+              <h2 className="auth-gate-title">Sign In to View Dashboard</h2>
+              <p className="auth-gate-sub">
+                Your dashboard shows all submitted tax health reports linked to your account.
+                Please sign in to access your reports.
+              </p>
+              <div className="auth-gate-actions">
+                <button
+                  className="btn-primary"
+                  onClick={() => setIsAuthOpen(true)}
+                >
+                  Sign In / Create Account
+                </button>
+              </div>
+            </div>
+          )
         )}
 
         {currentView === 'report' && selectedSubmission && (
