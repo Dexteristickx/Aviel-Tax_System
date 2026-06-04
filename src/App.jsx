@@ -26,14 +26,14 @@ export default function App() {
       supabase.auth.getUser().then(({ data: { user } }) => {
         if (user) {
           setUser(user);
-          fetchUserSubmissions(user.id);
+          syncLocalSubmissions(user.id).then(() => fetchUserSubmissions(user.id));
         }
       });
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         if (session?.user) {
           setUser(session.user);
-          fetchUserSubmissions(session.user.id);
+          syncLocalSubmissions(session.user.id).then(() => fetchUserSubmissions(session.user.id));
         } else {
           setUser(null);
         }
@@ -42,6 +42,26 @@ export default function App() {
       return () => subscription.unsubscribe();
     }
   }, []);
+
+  const syncLocalSubmissions = async (userId) => {
+    if (!isSupabaseConfigured) return;
+    try {
+      const local = JSON.parse(localStorage.getItem('aviel_submissions') || '[]');
+      const unsynced = local.filter(s => !s.userId);
+      if (unsynced.length > 0) {
+        const toSync = unsynced.map(s => ({ ...s, userId }));
+        const { error } = await supabase.from('submissions').insert(toSync);
+        if (!error) {
+          const updatedLocal = local.map(s => s.userId ? s : { ...s, userId });
+          localStorage.setItem('aviel_submissions', JSON.stringify(updatedLocal));
+        } else {
+          console.warn('Error syncing local submissions to DB:', error);
+        }
+      }
+    } catch (e) {
+      console.warn('Sync failed:', e);
+    }
+  };
 
   const fetchUserSubmissions = async (userId) => {
     try {
@@ -135,7 +155,8 @@ Write sections: 1. Executive Summary  2. Tax Identification Number (TIN) Status 
       id: Date.now(),
       timestamp: new Date().toLocaleString(),
       score,
-      risk
+      risk,
+      userId: user ? user.id : undefined
     };
 
     // AI Report Generation call
